@@ -1,0 +1,1343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover,maximum-scale=1.0,user-scalable=no">
+<meta name="theme-color" content="#0a0a0a">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<title>Ajon — Make Money UG</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html,body{height:100%;}
+body{background:#0a0a0a;color:#fff;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;font-size:15px;line-height:1.45;overflow:hidden;-webkit-font-smoothing:antialiased;user-select:none;-webkit-user-select:none;overscroll-behavior:none;}
+input,textarea{user-select:text;-webkit-user-select:text;}
+img{max-width:100%;}
+#app{display:flex;flex-direction:column;height:100vh;height:100dvh;max-width:560px;margin:0 auto;background:#0a0a0a;position:relative;overflow:hidden;}
+header{flex:0 0 auto;display:flex;align-items:center;gap:10px;padding:12px 16px;background:#0a0a0a;border-bottom:1px solid rgba(0,200,83,.35);position:relative;z-index:5;padding-top:calc(12px + env(safe-area-inset-top));}
+.logo-mark{font-size:24px;line-height:1;filter:drop-shadow(0 0 8px rgba(0,200,83,.6));}
+.logo{font-size:22px;font-weight:900;color:#00c853;letter-spacing:2px;line-height:1;text-shadow:0 0 14px rgba(0,200,83,.45);}
+.sub{font-size:10.5px;color:#8f8f8f;letter-spacing:.4px;margin-top:3px;font-weight:600;}
+.hdr-right{margin-left:auto;display:flex;align-items:center;gap:8px;}
+.user-badge{display:flex;align-items:center;gap:4px;background:linear-gradient(135deg,#003d14,#001f0a);border:1px solid rgba(0,200,83,.5);border-radius:999px;padding:4px 9px;font-size:10.5px;font-weight:800;color:#00c853;letter-spacing:.3px;white-space:nowrap;box-shadow:0 0 10px rgba(0,200,83,.15);}
+.user-badge .uc{font-size:12px;line-height:1;}
+.user-badge .pulse{width:5px;height:5px;background:#00c853;border-radius:50%;box-shadow:0 0 6px rgba(0,200,83,.9);animation:userPulse 1.6s ease-in-out infinite;}
+@keyframes userPulse{0%,100%{opacity:.4;transform:scale(.85);}50%{opacity:1;transform:scale(1.2);}}
+.netdot{width:10px;height:10px;border-radius:50%;background:#ff3d00;box-shadow:0 0 8px rgba(255,61,0,.8);transition:.3s;}
+.netdot.on{background:#00c853;box-shadow:0 0 8px rgba(0,200,83,.8);}
+nav.tabs{flex:0 0 auto;display:flex;gap:1px;background:#0a0a0a;border-bottom:1px solid #00c853;padding:6px 3px;position:relative;z-index:6;}
+.tab-btn{flex:1;background:transparent;border:0;color:#8a8a8a;font-family:inherit;display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 1px;border-radius:11px;font-size:8.5px;font-weight:700;letter-spacing:.1px;cursor:pointer;transition:background .2s ease,color .2s ease;min-width:0;}
+.tab-btn .ico{font-size:17px;line-height:1;}
+.tab-btn.active{background:#00c853;color:#000;}
+main{flex:1 1 auto;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;position:relative;}
+.panel{display:none;padding-bottom:24px;animation:fade .25s ease;}
+.panel.active{display:block;}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+.search{position:sticky;top:0;z-index:8;background:#0a0a0a;padding:12px 16px 8px;}
+.search input{width:100%;padding:12px 14px;border-radius:12px;background:#1a1a1a;color:#fff;border:1px solid #00c853;font-size:14px;font-family:inherit;outline:none;transition:box-shadow .2s;}
+.search input::placeholder{color:#7a7a7a;}
+.search input:focus{box-shadow:0 0 0 3px rgba(0,200,83,.18);}
+.search .count{font-size:11.5px;color:#8f8f8f;margin-top:8px;padding-left:2px;font-weight:600;}
+.cat-bar{display:flex;gap:8px;padding:8px 16px 12px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+.cat-bar::-webkit-scrollbar{display:none;}
+.cat-chip{flex:0 0 auto;padding:7px 14px;border-radius:999px;background:#1a1a1a;border:1px solid rgba(0,200,83,.4);color:#c8c8c8;font-size:12px;font-weight:700;cursor:pointer;transition:all .2s ease;white-space:nowrap;font-family:inherit;}
+.cat-chip.active{background:#00c853;color:#000;border-color:#00c853;}
+.ad-card{background:linear-gradient(135deg,#1a1a1a,#0f0f0f);border:1px solid rgba(0,200,83,.55);border-left:4px solid #00c853;border-radius:14px;padding:14px;margin:12px 16px;display:flex;gap:12px;align-items:flex-start;cursor:pointer;box-shadow:0 6px 20px rgba(0,200,83,.12),0 0 0 1px rgba(0,200,83,.06) inset;animation:slideUp .35s ease both;position:relative;overflow:hidden;}
+.ad-card:active{transform:scale(.99);}
+.ad-card:before{content:"";position:absolute;top:-40%;right:-20%;width:150px;height:150px;background:radial-gradient(circle,rgba(0,200,83,.18),transparent 70%);pointer-events:none;}
+.ad-emoji{font-size:30px;line-height:1;flex:0 0 auto;filter:drop-shadow(0 0 8px rgba(0,200,83,.45));}
+.ad-body{flex:1;min-width:0;}
+.ad-title{font-size:14.5px;font-weight:900;color:#00c853;letter-spacing:.3px;margin-bottom:4px;line-height:1.25;}
+.ad-text{font-size:12px;color:#dcdcdc;line-height:1.5;margin-bottom:8px;}
+.ad-text strong{color:#fff;font-weight:800;}
+.ad-cta{display:inline-flex;align-items:center;gap:5px;background:linear-gradient(135deg,#00c853,#009624);color:#fff;font-size:11.5px;font-weight:800;padding:6px 11px;border-radius:999px;letter-spacing:.3px;box-shadow:0 3px 10px rgba(0,200,83,.3);}
+.ad-ribbon{position:absolute;top:8px;right:8px;background:#00c853;color:#000;font-size:9px;font-weight:900;letter-spacing:.5px;padding:3px 7px;border-radius:999px;}
+.advert-modal{position:fixed;top:0;right:0;bottom:0;left:0;z-index:120;background:rgba(0,0,0,.88);display:none;align-items:center;justify-content:center;padding:20px;-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);}
+.advert-modal.open{display:flex;}
+.advert-modal-inner{background:#0f0f0f;border:1px solid #00c853;border-radius:18px;max-width:480px;width:100%;max-height:88vh;overflow-y:auto;padding:20px;position:relative;animation:slideUp .3s ease both;}
+.advert-modal-inner h3{color:#00c853;font-size:20px;font-weight:900;margin-bottom:6px;letter-spacing:.3px;}
+.advert-modal-inner .sub{color:#8f8f8f;font-size:12px;margin-bottom:16px;font-weight:600;}
+.advert-modal-close{position:absolute;top:12px;right:12px;background:transparent;border:0;color:#fff;font-size:24px;cursor:pointer;padding:4px 10px;line-height:1;}
+.advert-modal-close:active{color:#00c853;}
+.advert-price{background:linear-gradient(135deg,#001a0a,#003d14);border:1px solid rgba(0,200,83,.4);border-radius:12px;padding:16px;text-align:center;margin-bottom:14px;}
+.advert-price .num{font-size:32px;font-weight:900;color:#00c853;letter-spacing:1px;}
+.advert-price .per{font-size:12px;color:#8f8f8f;font-weight:700;letter-spacing:1px;margin-top:4px;}
+.advert-steps{background:#111;border-left:3px solid #00c853;border-radius:10px;padding:12px 14px;margin-bottom:12px;font-size:13px;color:#dcdcdc;line-height:1.7;}
+.advert-steps .step-line{display:flex;gap:8px;margin-bottom:8px;align-items:flex-start;}
+.advert-steps .step-line:last-child{margin-bottom:0;}
+.advert-steps .n{color:#00c853;font-weight:900;flex:0 0 auto;min-width:16px;}
+.advert-steps strong{color:#00c853;}
+.advert-what{background:#111;border-radius:10px;padding:12px 14px;margin-bottom:12px;font-size:12.5px;color:#b5b5b5;line-height:1.7;}
+.advert-what strong{color:#00c853;display:block;margin-bottom:6px;font-size:11.5px;letter-spacing:.5px;}
+.advert-cta-btn{display:block;width:100%;background:linear-gradient(135deg,#00c853,#009624);color:#fff;font-weight:800;font-size:15px;border:0;border-radius:12px;padding:14px 18px;font-family:inherit;cursor:pointer;text-decoration:none;text-align:center;box-shadow:0 6px 16px rgba(0,200,83,.3);letter-spacing:.3px;}
+.advert-cta-btn:active{transform:scale(.97);}
+.card{background:#1a1a1a;border-left:4px solid #00c853;border-radius:12px;padding:14px;margin:12px 16px;box-shadow:0 6px 18px rgba(0,0,0,.55);animation:slideUp .35s ease both;position:relative;}
+.card.locked{border-left-color:#444;opacity:.75;}
+@keyframes slideUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+.imgwrap{position:relative;border-radius:12px;overflow:hidden;background:linear-gradient(135deg,#0f2a17,#1a1a1a);min-height:160px;margin-bottom:12px;}
+.step-img{width:100%;height:160px;object-fit:cover;display:block;background:#0f2a17;}
+.badge{position:absolute;top:10px;right:10px;background:#00c853;color:#000;font-size:11px;font-weight:800;padding:5px 10px;border-radius:999px;box-shadow:0 2px 10px rgba(0,200,83,.5);}
+.badge.lock{background:#444;color:#ddd;}
+.fav{position:absolute;bottom:10px;right:10px;width:38px;height:38px;background:rgba(0,0,0,.62);border:0;border-radius:50%;font-size:17px;line-height:1;display:flex;align-items:center;justify-content:center;cursor:pointer;}
+.fav.pop{animation:pop .45s ease;}
+@keyframes pop{0%{transform:scale(1)}40%{transform:scale(1.5)}70%{transform:scale(.85)}100%{transform:scale(1)}}
+.card-title{font-size:16px;font-weight:800;margin:4px 0 8px;color:#fff;}
+.chip{display:inline-block;font-size:11px;font-weight:700;color:#00c853;background:rgba(0,200,83,.12);border:1px solid rgba(0,200,83,.4);padding:3px 9px;border-radius:999px;margin-bottom:10px;}
+.cost{font-size:12.5px;color:#b5b5b5;font-weight:600;display:block;margin-bottom:4px;}
+.profit{background:#003d14;color:#00c853;border-radius:12px;padding:11px 13px;font-weight:800;font-size:14px;margin:10px 0;border:1px solid rgba(0,200,83,.35);}
+.btn{display:block;width:100%;background:linear-gradient(135deg,#00c853,#009624);color:#fff;font-weight:700;font-size:15px;border:0;border-radius:12px;padding:13px 18px;font-family:inherit;cursor:pointer;transition:transform .15s ease,filter .15s ease;box-shadow:0 6px 16px rgba(0,200,83,.25);}
+.btn:active{transform:scale(.97);filter:brightness(.95);}
+.btn:disabled{opacity:.45;box-shadow:none;}
+.btn.grey{background:linear-gradient(135deg,#555,#333);box-shadow:none;}
+.btn.speak{background:linear-gradient(135deg,#00c853,#009624);display:flex;align-items:center;justify-content:center;gap:8px;}
+.dolist,.dontlist{margin:10px 0;border-radius:12px;padding:10px 12px;background:#111;}
+.dolist{border-left:4px solid #00c853;}
+.dontlist{border-left:4px solid #ff3d00;}
+.dolist h4,.dontlist h4{font-size:13px;margin-bottom:6px;letter-spacing:.5px;}
+.dolist h4{color:#00c853;}
+.dontlist h4{color:#ff3d00;}
+.dolist ul,.dontlist ul{list-style:none;}
+.dolist li,.dontlist li{font-size:13.5px;color:#dcdcdc;padding:4px 0 4px 18px;position:relative;}
+.dolist li:before{content:"✔";position:absolute;left:0;top:4px;color:#00c853;font-size:11px;}
+.dontlist li:before{content:"✖";position:absolute;left:0;top:4px;color:#ff3d00;font-size:11px;}
+.failbox{background:#1a1a1a;border-left:4px solid #ff3d00;border-radius:12px;padding:11px 13px;font-size:13px;color:#e6e6e6;margin:10px 0;}
+.failbox strong{color:#ff3d00;display:block;margin-bottom:6px;font-size:12.5px;letter-spacing:.4px;}
+.fail-item{font-size:12.5px;color:#dcdcdc;margin-bottom:6px;padding-left:14px;position:relative;}
+.fail-item:before{content:"→";position:absolute;left:0;color:#00c853;}
+.fail-item strong{display:inline;color:#ff3d00;margin:0;}
+.muted{color:#8f8f8f;font-size:12.5px;}
+.note{background:#003d14;color:#00c853;border-radius:10px;padding:10px 12px;font-size:12.5px;margin-top:10px;font-weight:600;line-height:1.5;}
+.memcount{font-size:12px;color:#8f8f8f;margin-top:10px;text-align:center;font-weight:600;}
+.empty{text-align:center;padding:40px 24px;color:#9a9a9a;font-size:14px;}
+.empty .bigicon{font-size:46px;margin-bottom:12px;line-height:1;}
+.empty h3{color:#fff;font-size:17px;margin-bottom:6px;font-weight:800;}
+.typing{display:flex;gap:6px;align-items:center;padding:6px 0;}
+.typing span{width:10px;height:10px;border-radius:50%;background:#00c853;display:inline-block;animation:bounce 1.4s infinite ease-in-out;}
+.typing span:nth-child(2){animation-delay:.18s;}
+.typing span:nth-child(3){animation-delay:.36s;}
+@keyframes bounce{0%,60%,100%{transform:translateY(0);opacity:.45;}30%{transform:translateY(-8px);opacity:1;}}
+.typing-label{font-size:12.5px;color:#00c853;font-weight:700;margin-top:4px;}
+.typed{font-size:14px;color:#dcdcdc;min-height:22px;white-space:pre-wrap;}
+.typed.cursor::after{content:"▍";color:#00c853;margin-left:1px;animation:blink .7s steps(1,end) infinite;}
+@keyframes blink{50%{opacity:0;}}
+.ai-top{display:flex;align-items:center;gap:8px;padding:12px 16px 0;flex-wrap:wrap;}
+.status-pill{font-size:11.5px;font-weight:700;padding:5px 11px;border-radius:999px;background:rgba(0,200,83,.12);color:#00c853;border:1px solid rgba(0,200,83,.4);}
+.brain-pill{font-size:11.5px;font-weight:700;padding:5px 11px;border-radius:999px;background:linear-gradient(135deg,#00c853,#009624);color:#000;border:1px solid #00c853;}
+.ai-input-row{padding:12px 16px 8px;}
+.ai-input-row input{width:100%;padding:13px 14px;border-radius:12px;background:#1a1a1a;color:#fff;border:1px solid #00c853;font-family:inherit;font-size:14px;outline:none;}
+.ai-input-row input::placeholder{color:#7a7a7a;}
+.ai-btn-row{padding:0 16px;}
+#panel-chat.active{display:flex;flex-direction:column;min-height:calc(100vh - 200px);min-height:calc(100dvh - 200px);}
+.chat-msgs{padding:14px 16px 6px;display:flex;flex-direction:column;gap:8px;flex:1 1 auto;}
+.bubble{max-width:82%;padding:10px 13px;border-radius:16px;font-size:14px;animation:slideUp .25s ease both;word-break:break-word;line-height:1.4;white-space:pre-wrap;}
+.bubble.other{background:#1a1a1a;color:#fff;align-self:flex-start;border-bottom-left-radius:5px;border-left:3px solid #00c853;}
+.bubble.me{background:#00c853;color:#000;font-weight:600;align-self:flex-end;border-bottom-right-radius:5px;}
+.chat-input-row{position:sticky;bottom:0;display:flex;gap:8px;padding:10px 16px 14px;background:#0a0a0a;border-top:1px solid rgba(0,200,83,.35);flex:0 0 auto;}
+.chat-input-row input{flex:1;min-width:0;padding:12px 14px;border-radius:12px;background:#1a1a1a;color:#fff;border:1px solid #00c853;font-family:inherit;font-size:14px;outline:none;}
+.chat-input-row input::placeholder{color:#7a7a7a;}
+.chat-input-row .btn{width:auto;padding:12px 18px;font-size:14px;}
+.notes-editor{padding:14px 16px 6px;}
+.notes-editor input,.notes-editor textarea{width:100%;background:#1a1a1a;color:#fff;border:1px solid #00c853;border-radius:12px;padding:12px 14px;font-family:inherit;font-size:14px;outline:none;margin-bottom:10px;}
+.notes-editor textarea{min-height:110px;resize:vertical;line-height:1.5;}
+.notes-editor input::placeholder,.notes-editor textarea::placeholder{color:#7a7a7a;}
+.notes-list{padding:6px 16px 20px;}
+.note-item{background:#1a1a1a;border-left:4px solid #00c853;border-radius:12px;padding:12px 14px;padding-right:64px;margin-bottom:10px;animation:slideUp .25s ease both;cursor:pointer;position:relative;}
+.note-item h4{color:#00c853;font-size:14.5px;margin-bottom:3px;font-weight:800;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.note-item .date{font-size:11px;color:#7a7a7a;margin-bottom:6px;font-weight:600;}
+.note-item p{font-size:13px;color:#dcdcdc;white-space:pre-wrap;word-break:break-word;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;}
+.note-delete{position:absolute;top:12px;right:12px;background:rgba(255,61,0,.15);color:#ff3d00;border:1px solid rgba(255,61,0,.4);border-radius:8px;padding:5px 9px;font-size:11px;font-weight:800;cursor:pointer;}
+.note-empty{text-align:center;padding:30px 20px;color:#8f8f8f;font-size:13px;}
+.note-empty .bigicon{font-size:40px;margin-bottom:10px;display:block;}
+.note-modal{position:fixed;top:0;right:0;bottom:0;left:0;z-index:100;background:rgba(0,0,0,.85);display:none;align-items:center;justify-content:center;padding:20px;}
+.note-modal.open{display:flex;}
+.note-modal-inner{background:#1a1a1a;border:1px solid #00c853;border-radius:16px;max-width:520px;width:100%;max-height:82vh;overflow-y:auto;padding:16px;}
+.note-modal-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:12px;padding-bottom:10px;border-bottom:1px solid rgba(0,200,83,.3);}
+.note-modal-head h3{color:#00c853;font-size:16px;font-weight:800;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.note-modal-head button{background:transparent;border:0;color:#fff;font-size:22px;cursor:pointer;padding:2px 8px;line-height:1;}
+#noteModalBody{color:#dcdcdc;font-size:14px;white-space:pre-wrap;word-break:break-word;line-height:1.55;}
+#noteModalBody .date{color:#7a7a7a;font-size:11.5px;font-weight:600;display:block;margin-bottom:12px;}
+#detailSheet{position:fixed;top:0;left:0;right:0;bottom:0;z-index:50;max-width:560px;margin:0 auto;background:#0a0a0a;overflow-y:auto;-webkit-overflow-scrolling:touch;transform:translateY(100%);transition:transform .3s cubic-bezier(.2,.8,.2,1);pointer-events:none;}
+#detailSheet.open{transform:translateY(0);pointer-events:auto;}
+.sheet-head{position:sticky;top:0;z-index:2;display:flex;align-items:center;gap:8px;background:rgba(10,10,10,.96);padding:12px 16px;border-bottom:1px solid rgba(0,200,83,.35);}
+.back-btn{width:36px;height:36px;border-radius:10px;flex:0 0 auto;background:#1a1a1a;border:1px solid rgba(0,200,83,.4);color:#00c853;font-size:16px;cursor:pointer;line-height:1;}
+.sheet-title{font-size:14.5px;font-weight:800;color:#fff;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1;}
+.speak-btn{width:38px;height:38px;border-radius:10px;flex:0 0 auto;background:linear-gradient(135deg,#00c853,#009624);border:0;color:#fff;font-size:16px;cursor:pointer;line-height:1;box-shadow:0 3px 10px rgba(0,200,83,.3);}
+.speak-btn.speaking{animation:speakPulse 1s ease-in-out infinite;}
+@keyframes speakPulse{0%,100%{box-shadow:0 0 0 0 rgba(0,200,83,.6);}50%{box-shadow:0 0 0 10px rgba(0,200,83,0);}}
+.step{background:#141414;border-left:4px solid #00c853;border-radius:12px;padding:12px;margin:10px 16px;animation:slideUp .3s ease both;}
+.step .step-img{height:140px;margin-bottom:10px;border-radius:10px;}
+.step-head{display:flex;align-items:center;gap:8px;margin-bottom:6px;}
+.step-num{width:24px;height:24px;border-radius:50%;background:#00c853;color:#000;font-weight:900;font-size:12px;display:flex;align-items:center;justify-content:center;flex:0 0 auto;}
+.step-title{font-size:11.5px;font-weight:800;color:#00c853;letter-spacing:.6px;text-transform:uppercase;}
+.step-text{font-size:13.5px;color:#dcdcdc;white-space:pre-wrap;}
+.sheet-body{padding:14px 16px 40px;}
+.sheet-body .card{margin-left:0;margin-right:0;}
+.sheet-body .step{margin-left:0;margin-right:0;}
+.mat-box{background:#111;border-left:3px solid #00c853;border-radius:10px;padding:10px 12px;margin:8px 0;}
+.mat-box h4{color:#00c853;font-size:12px;letter-spacing:.5px;margin-bottom:6px;font-weight:800;}
+.mat-item{display:flex;justify-content:space-between;gap:8px;padding:4px 0;border-bottom:1px dashed rgba(0,200,83,.15);font-size:12.5px;}
+.mat-item:last-child{border-bottom:0;}
+.mat-item .mi-name{color:#dcdcdc;flex:1;}
+.mat-item .mi-cost{color:#00c853;font-weight:700;white-space:nowrap;}
+.mat-item .mi-where{color:#8f8f8f;font-size:11px;display:block;margin-top:1px;}
+.market-box{background:#0a1a0e;border-left:3px solid #00c853;border-radius:10px;padding:10px 12px;margin:8px 0;}
+.market-box h4{color:#00c853;font-size:12px;letter-spacing:.5px;margin-bottom:6px;font-weight:800;}
+.market-item{font-size:12.5px;color:#dcdcdc;padding:5px 0;border-bottom:1px dashed rgba(0,200,83,.15);}
+.market-item:last-child{border-bottom:0;}
+.market-item strong{color:#00c853;display:block;font-size:11.5px;margin-bottom:2px;letter-spacing:.3px;}
+.start-today{background:linear-gradient(135deg,#003d14,#001f0a);border:1px solid #00c853;border-radius:12px;padding:12px;margin:12px 0;color:#00c853;font-size:13px;font-weight:700;line-height:1.5;}
+.start-today strong{display:block;font-size:11.5px;letter-spacing:.5px;margin-bottom:4px;color:#00c853;opacity:.85;}
+.free-bar{background:linear-gradient(135deg,#003d14,#001f0a);border-radius:12px;padding:12px;margin:0 16px 12px;border:1px solid rgba(0,200,83,.4);text-align:center;font-size:12.5px;color:#00c853;font-weight:700;line-height:1.5;}
+.free-bar strong{display:block;font-size:13.5px;margin-bottom:3px;letter-spacing:.3px;}
+.trial-bar{position:sticky;top:0;z-index:9;background:linear-gradient(135deg,#003d14,#001f0a);border-bottom:1px solid #00c853;padding:8px 16px;text-align:center;font-size:12.5px;color:#00c853;font-weight:700;letter-spacing:.3px;}
+.trial-bar .time{font-weight:900;font-size:14px;letter-spacing:1px;}
+.creator-card{background:linear-gradient(135deg,#0f2a17,#1a1a1a);border-left:4px solid #00c853;border-radius:12px;padding:18px 16px;margin:12px 16px 24px;text-align:center;box-shadow:0 6px 18px rgba(0,0,0,.55);}
+.creator-card .creator-logo{font-size:26px;font-weight:900;color:#00c853;letter-spacing:3px;margin-bottom:6px;text-shadow:0 0 14px rgba(0,200,83,.45);}
+.creator-card .creator-name{font-size:12.5px;color:#dcdcdc;letter-spacing:.3px;margin-bottom:6px;font-weight:700;line-height:1.5;}
+.creator-card .creator-tel{display:inline-block;font-size:13.5px;color:#00c853;font-weight:800;letter-spacing:.5px;margin:6px 0 12px;text-decoration:none;background:rgba(0,200,83,.1);padding:8px 14px;border-radius:999px;border:1px solid rgba(0,200,83,.4);}
+.creator-card .creator-tel:active{background:rgba(0,200,83,.25);}
+.creator-card .mission{font-size:14.5px;color:#00c853;font-weight:800;line-height:1.55;margin-bottom:14px;padding:0 8px;font-style:italic;}
+.creator-card .mission:before{content:"“";color:#00c853;font-size:20px;opacity:.6;}
+.creator-card .mission:after{content:"”";color:#00c853;font-size:20px;opacity:.6;}
+.creator-card .creator-copy{font-size:10.5px;color:#7a7a7a;letter-spacing:.4px;font-weight:600;}
+.creator-card .creator-divider{height:1px;background:linear-gradient(90deg,transparent,rgba(0,200,83,.4),transparent);margin:12px 0;}
+.paywall-wrap{padding:16px;display:flex;flex-direction:column;align-items:center;}
+.paywall-card{background:#0f0f0f;border:1px solid rgba(0,200,83,.4);border-radius:18px;padding:22px 18px;width:100%;max-width:440px;text-align:center;box-shadow:0 10px 30px rgba(0,200,83,.12),0 0 0 1px rgba(0,200,83,.05) inset;animation:slideUp .4s ease both;margin-bottom:14px;}
+.paywall-title{font-size:22px;font-weight:900;color:#00c853;letter-spacing:.4px;margin-bottom:8px;text-shadow:0 0 14px rgba(0,200,83,.35);}
+.paywall-lock{font-size:46px;line-height:1;margin-bottom:8px;filter:drop-shadow(0 0 12px rgba(0,200,83,.55));}
+.paywall-sub{font-size:12.5px;color:#8f8f8f;margin-bottom:16px;letter-spacing:.4px;font-weight:600;}
+.paywall-instructions{background:linear-gradient(135deg,#001a0a,#003d14);border:1px solid rgba(0,200,83,.35);border-radius:12px;padding:14px 12px;text-align:left;margin-bottom:16px;font-size:13px;color:#e6e6e6;line-height:1.7;}
+.paywall-instructions .line{display:flex;gap:8px;align-items:flex-start;margin-bottom:6px;}
+.paywall-instructions .line:last-child{margin-bottom:0;}
+.paywall-instructions .ic{color:#00c853;font-weight:900;flex:0 0 auto;}
+.paywall-instructions strong{color:#00c853;font-weight:800;}
+.paywall-instructions .num{color:#fff;font-weight:800;letter-spacing:.5px;}
+.paywall-hint{font-size:11.5px;color:#7a7a7a;margin-top:-6px;margin-bottom:14px;font-weight:600;letter-spacing:.3px;line-height:1.5;}
+.paywall-input-row{margin-bottom:12px;}
+#txInput{width:100%;padding:14px 14px;border-radius:12px;background:#0a0a0a;color:#fff;border:1px solid #00c853;font-family:ui-monospace,Menlo,monospace;font-size:15px;outline:none;text-align:center;letter-spacing:2px;transition:box-shadow .2s;}
+#txInput::placeholder{color:#5f5f5f;letter-spacing:.5px;font-family:inherit;font-size:13px;}
+#txInput:focus{box-shadow:0 0 0 3px rgba(0,200,83,.18);}
+#verifyBtn{display:block;width:100%;background:linear-gradient(135deg,#00c853,#009624);color:#fff;font-weight:800;font-size:15.5px;border:0;border-radius:12px;padding:15px 18px;font-family:inherit;cursor:pointer;box-shadow:0 6px 16px rgba(0,200,83,.3);transition:transform .15s ease,filter .15s ease;letter-spacing:.3px;}
+#verifyBtn:active{transform:scale(.97);filter:brightness(.95);}
+#statusMsg{margin-top:14px;font-size:13px;font-weight:700;line-height:1.55;min-height:20px;padding:0 4px;}
+#statusMsg.ok{color:#00c853;}
+#statusMsg.err{color:#ff3d00;}
+.paywall-active-card{background:linear-gradient(135deg,#003d14,#001f0a);border:1px solid #00c853;border-radius:18px;padding:22px 18px;text-align:center;width:100%;max-width:440px;box-shadow:0 10px 30px rgba(0,200,83,.2);}
+.paywall-active-card h3{color:#00c853;font-size:19px;font-weight:900;margin-bottom:8px;}
+.paywall-active-card .num{font-size:34px;font-weight:900;color:#00c853;letter-spacing:2px;margin:10px 0 4px;}
+.paywall-active-card .lbl{font-size:11px;color:#8f8f8f;font-weight:700;letter-spacing:1.5px;margin-bottom:12px;}
+.paywall-active-card .exp{font-size:12.5px;color:#c8c8c8;font-weight:600;}
+.paywall-divider{height:1px;background:linear-gradient(90deg,transparent,rgba(0,200,83,.4),transparent);margin:14px 0;}
+.paywall-perks{text-align:left;font-size:13px;color:#dcdcdc;line-height:1.8;}
+.paywall-perks .pr{display:flex;gap:8px;align-items:flex-start;}
+.paywall-perks .pr .tick{color:#00c853;font-weight:900;flex:0 0 auto;}
+.paywall-faq{margin-top:16px;background:#111;border-radius:12px;padding:12px 14px;font-size:12px;color:#b5b5b5;line-height:1.6;text-align:left;}
+.paywall-faq strong{color:#00c853;display:block;margin-bottom:4px;font-size:11.5px;letter-spacing:.5px;}
+#splashScreen{position:fixed;top:0;left:0;right:0;bottom:0;z-index:9999;background:radial-gradient(circle at 50% 40%,#0f2a17 0%,#0a0a0a 70%);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;text-align:center;transition:opacity .6s ease,visibility .6s ease;}
+#splashScreen.hide{opacity:0;visibility:hidden;pointer-events:none;}
+.splash-logo{font-size:64px;line-height:1;margin-bottom:14px;filter:drop-shadow(0 0 22px rgba(0,200,83,.7));animation:splashPulse 1.6s ease-in-out infinite;}
+@keyframes splashPulse{0%,100%{transform:scale(1);}50%{transform:scale(1.08);}}
+.splash-title{font-size:44px;font-weight:900;color:#00c853;letter-spacing:8px;line-height:1;text-shadow:0 0 30px rgba(0,200,83,.7);margin-bottom:8px;animation:splashFadeIn .8s ease both;}
+.splash-sub{font-size:11.5px;color:#8f8f8f;letter-spacing:3px;text-transform:uppercase;margin-bottom:40px;font-weight:700;animation:splashFadeIn .8s ease .15s both;}
+.splash-welcome{font-size:26px;font-weight:900;color:#fff;letter-spacing:1px;margin-bottom:8px;line-height:1.2;animation:splashFadeIn .8s ease .35s both;}
+.splash-tagline{font-size:20px;font-weight:800;color:#00c853;letter-spacing:.5px;margin-bottom:44px;line-height:1.3;animation:splashFadeIn .8s ease .55s both;}
+@keyframes splashFadeIn{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:translateY(0);}}
+.splash-loader{width:180px;height:4px;background:rgba(0,200,83,.15);border-radius:999px;overflow:hidden;animation:splashFadeIn .8s ease .75s both;}
+.splash-bar{height:100%;width:0;background:linear-gradient(90deg,#00c853,#009624);border-radius:999px;box-shadow:0 0 12px rgba(0,200,83,.8);animation:splashLoad 2.3s ease forwards .8s;}
+@keyframes splashLoad{to{width:100%;}}
+.splash-footer{position:absolute;bottom:calc(28px + env(safe-area-inset-bottom));font-size:10.5px;color:#5a5a5a;letter-spacing:2px;font-weight:700;animation:splashFadeIn .8s ease 1s both;}
+</style>
+</head>
+<body>
+
+<div id="splashScreen">
+  <div class="splash-logo">💰</div>
+  <div class="splash-title">AJON</div>
+  <div class="splash-sub">1500+ Ways To Make Money</div>
+  <div class="splash-welcome">Welcome</div>
+  <div class="splash-tagline">Start Your Business Now</div>
+  <div class="splash-loader"><div class="splash-bar"></div></div>
+  <div class="splash-footer">MADE BY AJON INNO</div>
+</div>
+
+<div id="app">
+  <header>
+    <div class="logo-mark">💰</div>
+    <div>
+      <div class="logo">AJON</div>
+      <div class="sub">1500+ Ways To Make Money</div>
+    </div>
+    <div class="hdr-right">
+      <div class="user-badge" title="Active users"><span class="pulse"></span><span class="uc">👥</span><span id="userBadge">1.0k</span></div>
+      <div class="netdot" id="netDot"></div>
+    </div>
+  </header>
+
+  <nav class="tabs">
+    <button class="tab-btn active" data-tab="tutorials" onclick="showTab('tutorials')"><span class="ico">📚</span><span>Tutorials</span></button>
+    <button class="tab-btn" data-tab="video" onclick="showTab('video')"><span class="ico">🔓</span><span>Unlock</span></button>
+    <button class="tab-btn" data-tab="ai" onclick="showTab('ai')"><span class="ico">🧠</span><span>Helper</span></button>
+    <button class="tab-btn" data-tab="notes" onclick="showTab('notes')"><span class="ico">📝</span><span>Notes</span></button>
+    <button class="tab-btn" data-tab="chat" onclick="showTab('chat')"><span class="ico">💬</span><span>Assist</span></button>
+  </nav>
+
+  <main id="main">
+    <div id="trialBar"></div>
+
+    <section class="panel active" id="panel-tutorials">
+      <div class="search">
+        <input id="searchInput" type="search" placeholder="🔍 Search 1500+ business ideas..." autocomplete="off" spellcheck="false">
+        <div class="count" id="tutCount"></div>
+      </div>
+      <div class="cat-bar" id="catBar"></div>
+      <div id="tutList"></div>
+    </section>
+
+    <section class="panel" id="panel-video"><div id="videoArea"></div></section>
+
+    <section class="panel" id="panel-ai">
+      <div class="ai-top">
+        <span class="brain-pill">🧠 Your Helper</span>
+        <span class="status-pill" id="aiStatus">🟢 Checking...</span>
+        <span class="status-pill" id="histPill">🧠 0 saved</span>
+      </div>
+      <div class="ai-input-row">
+        <input id="aiInput" type="text" placeholder="Ask: how do I make candy?" autocomplete="off">
+      </div>
+      <div class="ai-btn-row">
+        <button class="btn" onclick="askAI()">🧠 Ask Your Helper</button>
+      </div>
+      <div id="aires"></div>
+    </section>
+
+    <section class="panel" id="panel-notes">
+      <div class="notes-editor">
+        <input id="noteTitle" type="text" placeholder="📝 Note title..." autocomplete="off">
+        <textarea id="noteBody" placeholder="Write your idea, customer contact, or reminder..."></textarea>
+        <button class="btn" onclick="saveNote()">💾 Save Note</button>
+      </div>
+      <div class="notes-list" id="notesList"></div>
+      <div id="creatorSlot"></div>
+    </section>
+
+    <section class="panel" id="panel-chat">
+      <div class="chat-msgs" id="chatMsgs"></div>
+      <div class="chat-input-row">
+        <input id="chatInput" type="text" placeholder="Ask an assistant..." autocomplete="off">
+        <button class="btn" onclick="sendChat()">Send</button>
+      </div>
+    </section>
+  </main>
+</div>
+
+<div id="detailSheet" role="dialog" aria-modal="true"></div>
+
+<div class="note-modal" id="noteModal">
+  <div class="note-modal-inner">
+    <div class="note-modal-head">
+      <h3 id="noteModalTitle"></h3>
+      <button onclick="closeNoteModal()" aria-label="Close">✕</button>
+    </div>
+    <div id="noteModalBody"></div>
+  </div>
+</div>
+
+<div class="advert-modal" id="advertModal">
+  <div class="advert-modal-inner">
+    <button class="advert-modal-close" onclick="closeAdvertModal()">✕</button>
+    <h3>📢 Advertise Your Business</h3>
+    <div class="sub">Reach 208,000+ active Ajon users</div>
+    <div class="advert-price">
+      <div class="num">5,000 UGX</div>
+      <div class="per">PER WEEK</div>
+    </div>
+    <div class="advert-steps">
+      <div class="step-line"><span class="n">1.</span><div>Pay <strong>5,000 UGX</strong> to MTN <strong>0768207738</strong> — Bwire.</div></div>
+      <div class="step-line"><span class="n">2.</span><div>After payment, send your advert details by SMS or WhatsApp to <strong>0768207738</strong>: business name, product/service, phone, and short description (max 150 words).</div></div>
+      <div class="step-line"><span class="n">3.</span><div>Attach a clear photo of your product or business.</div></div>
+      <div class="step-line"><span class="n">4.</span><div>Your advert goes live within 24 hours and runs for 7 days to all Ajon users.</div></div>
+      <div class="step-line"><span class="n">5.</span><div>Renew anytime for another week.</div></div>
+    </div>
+    <div class="advert-what">
+      <strong>WHAT YOU GET</strong>
+      ✓ Featured banner in the Tutorials tab for 7 days<br>
+      ✓ Reaches 208,000+ Ugandan business owners<br>
+      ✓ Direct tap-to-call or WhatsApp button<br>
+      ✓ Your business seen by buyers across Uganda
+    </div>
+    <a class="advert-cta-btn" href="tel:+256768207738">📞 Call / SMS 0768207738 to Advertise</a>
+  </div>
+</div>
+
+<script>
+/* =====================================================================
+   AJON — com.ajon.makemoney
+   ===================================================================== */
+
+var SERVER_CONFIG = {
+  appwrite: {
+    endpoint: "https://cloud.appwrite.io/v1",
+    projectId: "YOUR_APPWRITE_PROJECT_ID",
+    databaseId: "YOUR_DATABASE_ID",
+    tutorialsCollection: "tutorials",
+    configCollection: "app_config",
+    paymentsCollection: "payments"
+  },
+  defaults: { trialMinutes: 5, subscriptionDays: 30 }
+};
+
+var PAYMENT_INFO = { phone: "0768207738", name: "Bwire", amount: 10000, currency: "UGX" };
+var ADVERT_INFO  = { phone: "0768207738", price: 5000, currency: "UGX", period: "week" };
+
+/* ===================================================================
+   HOURLY PASSWORD — regenerates every hour, based on real date+time
+   ===================================================================
+     MonthIndex = (Year - 2026) * 12 + Month          // Month 0-11
+     DayIdx     = MonthIndex * 31 + Day               // Day 1-31
+     HourIdx    = DayIdx * 24 + Hour                  // Hour 0-23
+     Num        = 2000 + HourIdx * 13 + 77 * 13
+     Letter1    = chr(97 + (Year - 2026) % 26)        // 'a' for 2026
+     Letter2    = chr(97 + (Month % 26))
+     Letter3    = chr(97 + (Day % 26))
+     Letter4    = chr(97 + Hour)                      // 'a'..'x'
+     Last       = (HourIdx * 7 + Year % 10) % 9 + 1
+     Password   = "aj" + Num + Letter1 + Letter2 + Letter3 + Letter4 + Last
+   =================================================================== */
+function generateCurrentPassword() {
+  var now = new Date();
+  var Year = now.getFullYear();
+  var Month = now.getMonth();
+  var Day = now.getDate();
+  var Hour = now.getHours();
+  if (Year < 2026) return null;
+  var MonthIndex = (Year - 2026) * 12 + Month;
+  if (MonthIndex < 0) return null;
+  var DayIdx = MonthIndex * 31 + Day;
+  var HourIdx = DayIdx * 24 + Hour;
+  var Num = 2000 + HourIdx * 13 + 77 * 13;
+  var L1 = String.fromCharCode(97 + ((Year - 2026) % 26));
+  var L2 = String.fromCharCode(97 + (Month % 26));
+  var L3 = String.fromCharCode(97 + (Day % 26));
+  var L4 = String.fromCharCode(97 + Hour);
+  var Last = (HourIdx * 7 + Year % 10) % 9 + 1;
+  return ("aj" + Num + L1 + L2 + L3 + L4 + Last).toLowerCase();
+}
+function currentHourEndsAt() {
+  var d = new Date();
+  d.setMinutes(59); d.setSeconds(59); d.setMilliseconds(999);
+  return d.getTime();
+}
+function isDateValid() {
+  var now = new Date();
+  var Y = now.getFullYear();
+  var MI = (Y - 2026) * 12 + now.getMonth();
+  return (Y >= 2026 && MI >= 0);
+}
+
+window.onerror = function () { return true; };
+
+/* ============================================================
+   CATEGORIES
+   ============================================================ */
+var CATEGORIES = [
+  { id: "food",  name: "🍲 Food & Drinks" },
+  { id: "home",  name: "🧼 Home Products" },
+  { id: "cosm",  name: "🧴 Cosmetics" },
+  { id: "agri",  name: "🌾 Agriculture" },
+  { id: "craft", name: "🎨 Crafts" },
+  { id: "oil",   name: "🛢️ Cooking Oils" }
+];
+
+/* ============================================================
+   IMAGE HELPERS
+   ============================================================ */
+function tutImg(keyword, lock) {
+  var kw = encodeURIComponent(keyword || "business");
+  return "https://loremflickr.com/600/400/" + kw + "?lock=" + (lock || 1);
+}
+function svgFallback(emoji, label) {
+  var safe = String(label || "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+  var svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400">' +
+    '<defs><linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#0f2a17"/><stop offset="100%" stop-color="#1a1a1a"/></linearGradient></defs>' +
+    '<rect width="600" height="400" fill="url(#g)"/>' +
+    '<text x="300" y="180" font-size="110" text-anchor="middle" dominant-baseline="middle">' + (emoji || "💰") + '</text>' +
+    '<text x="300" y="290" font-size="24" text-anchor="middle" fill="#00c853" font-weight="700" font-family="Arial,sans-serif">' + safe + '</text></svg>';
+  return "data:image/svg+xml;charset=UTF-8," + encodeURIComponent(svg);
+}
+function imgTag(src, fb, alt, cls) {
+  return '<img class="' + (cls || "step-img") + '" src="' + src + '" alt="' + escapeHTML(alt || "") + '" loading="lazy" data-fb="' + fb + '" onerror="this.onerror=null;this.src=this.getAttribute(\'data-fb\');">';
+}
+
+/* ============================================================
+   TUTORIALS DATA — 33 detailed tutorials
+   ============================================================ */
+var TUTORIALS_DATA = [
+{id:1,t:"Hard Sugar Candy",emoji:"🍬",c:"food",imgKey:"sugar candy",cost:12000,sales:40000,profit:28000,time:"1 hour per batch",where:"Owino / Nakasero / Kikuubo",tagline:"Perfect for Ajon — sweets is low cost high profit, sells fast in Kampala.",materials:[{item:"Sugar 1kg",cost:"4,500",where:"Owino / Nakasero"},{item:"Glucose syrup 250ml or honey",cost:"3,000",where:"Local shops"},{item:"Water 200ml",cost:"0",where:"Home"},{item:"Food color 1 small bottle",cost:"1,500",where:"Kikuubo"},{item:"Flavor essence",cost:"1,500",where:"Kikuubo"},{item:"Lemon 2",cost:"500",where:"Local market"},{item:"Lollipop sticks 50pcs",cost:"1,000",where:"Kikuubo"}],tools:["Sufuria","Wooden spoon","Tray with oil","Gloves","Thermometer or cold water test"],steps:["**Mix:** In sufuria add sugar 1kg + water 200ml + glucose 3 spoons. Stir to dissolve. DO NOT add color yet.","**Boil:** Medium charcoal fire. Let boil WITHOUT stirring after it starts boiling. Boil 12-15 min.","**Test:** Drop in cold water — if it hardens and cracks like glass, ready (150°C).","**Flavor:** Off fire. Add 1 teaspoon flavor + 3 drops food color + squeeze lemon. Stir 10 seconds.","**Shape:** Pour on oiled tray. Wear gloves! Cut into squares while warm.","**Cool & Pack:** Cool 20 mins. Pack in polythene bags 10 pcs each. Sell 500 UGX per pack."],dos:["Wear gloves","Use plastic or steel tray with oil","Work in dry place","Add lemon for clarity"],donts:["Don't add water to hot sugar","Don't stir after boiling starts","Don't add color at start"],fails:[{problem:"Sticky / not hard",fix:"Removed early — return to fire, boil 5 mins more"},{problem:"Sandy texture",fix:"Stirred too much — don't stir, add glucose"},{problem:"Bitter black",fix:"Too much heat — use medium fire"}],market:[{channel:"Schools",detail:"Kids buy 100 UGX candy at break."},{channel:"Taxi parks",detail:"Hawkers buy 10 packs to resell."},{channel:"Shops",detail:"Pack branded Ajon Sweets."},{channel:"WhatsApp",detail:"Post status 'Fresh sweets'."}],startToday:"Make 1 batch evening, taste test with family, take to 2 shops tomorrow."},
+{id:2,t:"Lollipops on Sticks",emoji:"🍭",c:"food",imgKey:"lollipop",cost:15000,sales:45000,profit:30000,time:"1.5 hours",where:"Kikuubo / Owino",tagline:"Colourful lollipops kids love.",materials:[{item:"Sugar 1kg",cost:"4,500",where:"Owino"},{item:"Glucose syrup 200ml",cost:"2,500",where:"Kikuubo"},{item:"Food colour",cost:"1,500",where:"Kikuubo"},{item:"Flavour essence",cost:"1,500",where:"Kikuubo"},{item:"Lollipop moulds",cost:"2,000",where:"Kikuubo"},{item:"Lollipop sticks 100pcs",cost:"2,500",where:"Kikuubo"}],tools:["Sufuria","Wooden spoon","Moulds","Gloves"],steps:["**Mix:** Sugar 1kg + water 200ml + glucose. Stir.","**Boil:** Medium fire. Don't stir after boiling starts. 12-15 min.","**Test:** Cold water — must crack like glass.","**Flavour:** Off fire. Add 1 tsp flavour + 3 drops colour. Stir 10 seconds.","**Mould:** Pour into moulds with sticks inserted.","**Cool & pack:** 20 mins. Wrap. Sell 200 UGX each."],dos:["Insert sticks while candy soft","Work fast","Wear gloves"],donts:["Don't stir after boiling","Don't add colour at start","Don't pour on wet surface"],fails:[{problem:"Sticks fall out",fix:"Insert while soft"},{problem:"Sticky",fix:"Dry room, wrap quickly"},{problem:"Cloudy",fix:"Add lemon juice"}],market:[{channel:"School gates",detail:"200 UGX each, 100+ in 30 min."},{channel:"Supermarkets",detail:"Branded cellophane."},{channel:"Parties",detail:"Bulk to parents."}],startToday:"Make 1 batch tonight, wrap 50, test at nearest school."},
+{id:3,t:"Mandazi Business",emoji:"🥯",c:"food",imgKey:"mandazi",cost:12000,sales:30000,profit:18000,time:"1.5 hours",where:"Local market / Owino",tagline:"Breakfast staple — sells 6am to 10am.",materials:[{item:"Wheat flour 2kg",cost:"6,000",where:"Owino"},{item:"Sugar 250g",cost:"1,200",where:"Local market"},{item:"Baking powder",cost:"1,000",where:"Kikuubo"},{item:"Cardamom",cost:"800",where:"Local market"},{item:"Cooking oil 1L",cost:"5,000",where:"Local market"},{item:"Coconut milk 400ml",cost:"2,500",where:"Local market"}],tools:["Mixing bowl","Rolling pin","Frying pan","Slotted spoon"],steps:["**Mix dry:** Flour + sugar + baking powder + cardamom.","**Add wet:** 1 egg + 200ml coconut milk. Knead soft dough.","**Rest:** 30 mins.","**Roll & cut:** Triangles.","**Fry:** 170°C until golden.","**Drain & pack:** Sell 500 UGX per pack."],dos:["Rest dough 30 minutes","Medium heat oil","Small batches"],donts:["Don't over-knead","Don't use cold milk","Don't fry in cold oil"],fails:[{problem:"Greasy",fix:"Heat oil to 170°C"},{problem:"Hard",fix:"Knead less"},{problem:"Raw inside",fix:"Medium heat"}],market:[{channel:"Morning commuters",detail:"Bus stage 6am."},{channel:"Schools",detail:"Canteen supply."},{channel:"Offices",detail:"8am delivery."}],startToday:"Fry 40 pieces tonight, sell at bus stage 6am."},
+{id:4,t:"Chapati Business",emoji:"🫓",c:"food",imgKey:"chapati",cost:10000,sales:28000,profit:18000,time:"1.5 hours",where:"Local market / Nakasero",tagline:"Uganda's favourite.",materials:[{item:"Wheat flour 2kg",cost:"6,000",where:"Owino"},{item:"Salt",cost:"500",where:"Local market"},{item:"Cooking oil 500ml",cost:"2,500",where:"Local market"},{item:"Warm water",cost:"0",where:"Home"},{item:"Butter",cost:"1,500",where:"Local market"}],tools:["Mixing bowl","Rolling pin","Frying pan","Ladle"],steps:["**Mix:** Flour + salt + oil + warm water. Knead soft.","**Rest:** 40 mins.","**Roll:** Balls, 3mm thick.","**Cook:** Hot pan 2 min per side.","**Stack:** Brush with butter.","**Pack:** Sell 500 UGX each."],dos:["Rest 40 mins","Hot pan","Oil between layers"],donts:["Don't use cold water","Don't roll thin","Don't skip resting"],fails:[{problem:"Hard",fix:"Rest 40 mins"},{problem:"Sticky",fix:"Add flour"},{problem:"Tearing",fix:"Add oil"}],market:[{channel:"Bus parks",detail:"200+ per day."},{channel:"Schools",detail:"Canteens."},{channel:"Evening market",detail:"6pm-9pm."}],startToday:"Roll 30 chapatis tonight."},
+{id:5,t:"Samosa Business",emoji:"🥟",c:"food",imgKey:"samosa",cost:15000,sales:40000,profit:25000,time:"2 hours",where:"Owino / Nakasero",tagline:"High margin snack.",materials:[{item:"Wheat flour 1kg",cost:"3,000",where:"Owino"},{item:"Minced meat or peas 500g",cost:"6,000",where:"Local market"},{item:"Onions 3",cost:"1,000",where:"Local market"},{item:"Spices",cost:"1,000",where:"Kikuubo"},{item:"Cooking oil 1L",cost:"5,000",where:"Local market"},{item:"Salt",cost:"500",where:"Local market"}],tools:["Rolling pin","Frying pan","Knife","Slotted spoon"],steps:["**Dough:** Flour + salt + oil + water. Rest 30 mins.","**Filling:** Cook meat/peas with spices.","**Roll:** Thin, cut strips.","**Fold:** Cones, fill, seal.","**Fry:** 170°C golden.","**Pack:** Sell 500 UGX each."],dos:["Seal edges well","Drain filling","Small batches"],donts:["Don't overfill","Don't use wet filling","Don't fry on high heat"],fails:[{problem:"Bursting",fix:"Drain filling"},{problem:"Soggy",fix:"Oil 170°C minimum"},{problem:"Tough",fix:"Rest 30 mins"}],market:[{channel:"Bus parks",detail:"Best location."},{channel:"Offices",detail:"Lunch delivery."},{channel:"Events",detail:"Weddings."}],startToday:"Make 40 pieces tonight."},
+{id:6,t:"Doughnuts Business",emoji:"🍩",c:"food",imgKey:"doughnut",cost:15000,sales:38000,profit:23000,time:"2 hours",where:"Owino / Nakasero",tagline:"Soft, sweet, cheap.",materials:[{item:"Wheat flour 2kg",cost:"6,000",where:"Owino"},{item:"Sugar 500g",cost:"2,000",where:"Local market"},{item:"Yeast 50g",cost:"1,500",where:"Kikuubo"},{item:"Milk 500ml",cost:"2,000",where:"Local market"},{item:"Egg 2",cost:"1,000",where:"Local market"},{item:"Cooking oil 1L",cost:"5,000",where:"Local market"}],tools:["Mixing bowl","Rolling pin","Round cutter","Frying pan","Slotted spoon"],steps:["**Mix:** Flour + sugar + yeast + milk + eggs.","**Rise 1:** 1 hour.","**Shape:** Cut rings.","**Rise 2:** 30 mins.","**Fry:** Golden.","**Coat:** Toss in sugar."],dos:["Rise twice","Warm milk"],donts:["Don't use hot milk","Don't skip second rise"],fails:[{problem:"Flat",fix:"Fresh yeast"},{problem:"Raw inside",fix:"Medium heat"},{problem:"Hard",fix:"Knead gently"}],market:[{channel:"Schools",detail:"100+ per day."},{channel:"Offices",detail:"Morning."},{channel:"Supermarkets",detail:"Pack 6."}],startToday:"Make 30 tonight."},
+{id:7,t:"Popcorn Business",emoji:"🍿",c:"food",imgKey:"popcorn",cost:8000,sales:25000,profit:17000,time:"30 minutes",where:"Local market",tagline:"Easiest snack to make.",materials:[{item:"Popcorn kernels 2kg",cost:"6,000",where:"Owino"},{item:"Cooking oil 500ml",cost:"2,500",where:"Local market"},{item:"Salt or sugar",cost:"500",where:"Local market"}],tools:["Large sufuria","Wooden spoon","Bags"],steps:["**Heat:** Oil.","**Add kernels:** 1/2 cup, cover.","**Shake:** Until popping stops.","**Flavour:** Butter, salt/sugar.","**Pack:** Sell 1,000 UGX."],dos:["Large sufuria","Shake while popping"],donts:["Don't use high heat","Don't uncover"],fails:[{problem:"Burnt",fix:"Medium fire"},{problem:"Unpopped",fix:"Fresh kernels"},{problem:"Soggy",fix:"Cool 2 mins"}],market:[{channel:"Cinemas",detail:"2,000 per pack."},{channel:"Schools",detail:"1,000 UGX."},{channel:"Market stalls",detail:"Pop fresh."}],startToday:"Pop 500g tonight."},
+{id:8,t:"Roasted Groundnuts",emoji:"🥜",c:"food",imgKey:"roasted groundnuts",cost:10000,sales:26000,profit:16000,time:"45 minutes",where:"Local market / Owino",tagline:"Simple, fast, high margin.",materials:[{item:"Raw groundnuts 2kg",cost:"8,000",where:"Owino"},{item:"Salt",cost:"500",where:"Local market"},{item:"Polythene bags",cost:"1,000",where:"Kikuubo"}],tools:["Large pan","Wooden spoon","Sieve"],steps:["**Sort:** Remove bad nuts.","**Rinse:** Drain fully.","**Roast:** Medium fire 15 mins.","**Salt:** While hot.","**Cool:** 10 mins.","**Pack:** Sell 2,000 UGX per bag."],dos:["Sort before roasting","Stir constantly"],donts:["Don't roast wet nuts","Don't pack hot"],fails:[{problem:"Burnt",fix:"Medium heat, stir"},{problem:"Soggy",fix:"Dry fully"},{problem:"Not crunchy",fix:"Roast 3 more mins"}],market:[{channel:"Bus stages",detail:"Boda riders."},{channel:"Schools",detail:"Kids buy."},{channel:"Supermarkets",detail:"Brand and sell."}],startToday:"Roast 1kg tonight."},
+{id:9,t:"Peanut Butter",emoji:"🥜",c:"food",imgKey:"peanut butter",cost:25000,sales:55000,profit:30000,time:"1.5 hours",where:"Owino / Nakasero",tagline:"Healthy food.",materials:[{item:"Groundnuts 3kg",cost:"12,000",where:"Owino"},{item:"Salt 100g",cost:"500",where:"Local market"},{item:"Honey 200ml",cost:"5,000",where:"Local market"},{item:"Groundnut oil 200ml",cost:"3,000",where:"Local market"},{item:"Jars 250g x 10",cost:"4,500",where:"Kikuubo"}],tools:["Blender","Roasting pan","Jars"],steps:["**Roast:** Golden brown.","**Remove skins:** Rub.","**Grind:** Smooth.","**Mix:** Salt + honey + oil.","**Pack:** Fill jars.","**Sell:** 8,000 UGX per jar."],dos:["Roast before grinding","Add oil"],donts:["Don't use raw nuts","Don't add water"],fails:[{problem:"Bitter",fix:"Roast golden only"},{problem:"Too dry",fix:"More oil"},{problem:"Mouldy",fix:"Sterilise jars"}],market:[{channel:"Families",detail:"Door-to-door."},{channel:"Health shops",detail:"Organic shops."},{channel:"WhatsApp",detail:"Post photos."}],startToday:"Make 5 jars tonight."},
+{id:10,t:"Passion Juice",emoji:"🥤",c:"food",imgKey:"passion fruit juice",cost:15000,sales:40000,profit:25000,time:"1 hour",where:"Owino / Nakasero",tagline:"Refreshing and cheap.",materials:[{item:"Passion fruits 2kg",cost:"8,000",where:"Owino"},{item:"Sugar 500g",cost:"2,000",where:"Local market"},{item:"Bottles 500ml x 15",cost:"3,000",where:"Kikuubo"},{item:"Labels",cost:"1,000",where:"Kikuubo"}],tools:["Blender","Sieve","Bottles"],steps:["**Wash & cut:** Fruits.","**Scoop:** Into blender.","**Blend:** 30 seconds.","**Strain:** Remove seeds.","**Mix:** Water + sugar.","**Chill & bottle:** Sell 2,500 UGX each."],dos:["Ripe fruits","Chill before selling"],donts:["Don't add too much water","Don't use spoilt fruits"],fails:[{problem:"Ferments",fix:"Chill, sell within 3 days"},{problem:"Too sour",fix:"Ripe fruits"},{problem:"Bitter",fix:"Blend 30 seconds only"}],market:[{channel:"Offices",detail:"10 bottles at lunch."},{channel:"Schools",detail:"2,000 UGX."},{channel:"Events",detail:"1,500 UGX in bulk."}],startToday:"Make 10 bottles tonight."},
+{id:11,t:"Ice Lollipops",emoji:"🧊",c:"food",imgKey:"ice lolly popsicle",cost:8000,sales:25000,profit:17000,time:"6 hours freezing",where:"Local market",tagline:"Perfect for hot days.",materials:[{item:"Sugar 500g",cost:"2,000",where:"Local market"},{item:"Fruit juice concentrate",cost:"3,000",where:"Owino"},{item:"Ice lolly moulds",cost:"2,000",where:"Kikuubo"},{item:"Sticks 100pcs",cost:"1,000",where:"Kikuubo"}],tools:["Mixing jug","Freezer","Moulds"],steps:["**Mix:** Water + sugar + juice.","**Pour:** Into moulds.","**Sticks:** After 1 hour.","**Freeze:** 6 hours.","**Sell:** 500 UGX each."],dos:["Clean water","Insert stick after 1 hour"],donts:["Don't use dirty water","Don't refreeze"],fails:[{problem:"Sticks fall out",fix:"Insert half-frozen"},{problem:"Not sweet",fix:"More sugar"},{problem:"Bland",fix:"Real juice"}],market:[{channel:"Schools",detail:"100+ per day."},{channel:"Bus parks",detail:"Hot days 200+."},{channel:"Market",detail:"Carry cooler."}],startToday:"Mix and freeze tonight."},
+{id:12,t:"Toffee Candy",emoji:"🍮",c:"food",imgKey:"toffee candy",cost:12000,sales:30000,profit:18000,time:"45 minutes",where:"Owino / Nakasero",tagline:"Chewy sweet.",materials:[{item:"Sugar 500g",cost:"2,000",where:"Local market"},{item:"Butter 100g",cost:"2,000",where:"Local market"},{item:"Condensed milk 1 tin",cost:"4,000",where:"Local market"},{item:"Vanilla essence",cost:"1,000",where:"Kikuubo"},{item:"Polythene wrappers",cost:"2,000",where:"Kikuubo"}],tools:["Heavy pan","Wooden spoon","Tray","Knife"],steps:["**Melt:** Butter.","**Add:** Sugar + milk.","**Stir:** 20 mins.","**Flavour:** Vanilla.","**Pour:** Into tray.","**Cut:** Sell 200 UGX each."],dos:["Stir constantly","Heavy pan"],donts:["Don't leave unattended","Don't use high heat"],fails:[{problem:"Burnt",fix:"Medium heat"},{problem:"Too soft",fix:"Cook 5 more mins"},{problem:"Sticks",fix:"Grease tray"}],market:[{channel:"Kids",detail:"100+ per day."},{channel:"Shops",detail:"Kiosks."},{channel:"Parties",detail:"Gift bags."}],startToday:"Make 1 batch tonight."},
+{id:13,t:"Liquid Soap",emoji:"🧼",c:"home",imgKey:"liquid soap bottle",cost:15000,sales:40000,profit:25000,time:"2 hours",where:"Kikuubo / Chemical shops",tagline:"Uganda's #1 home business.",materials:[{item:"Caustic soda 500g",cost:"2,000",where:"Chemical shops"},{item:"Sulphonic acid 1L",cost:"5,000",where:"Chemical shops"},{item:"Texapon 500ml",cost:"3,000",where:"Chemical shops"},{item:"Glycerine 200ml",cost:"2,000",where:"Chemical shops"},{item:"Salt 500g",cost:"500",where:"Local market"},{item:"Perfume / colour",cost:"2,500",where:"Kikuubo"}],tools:["20L bucket","Long wooden stirrer","Gloves","Bottles x 40"],steps:["Add water + salt. Stir.","Add caustic soda, stir.","Add urea.","Add foaming agent.","Add sulphonic acid.","Add remaining water.","Add colour + fragrance. Settle 6-7 hours.","Pack. Sell 2,000 UGX per bottle."],dos:["Wear gloves","Add caustic to water","Settle 6-7 hours"],donts:["Don't mix near children","Don't use metal","Don't expose to sunlight"],fails:[{problem:"Cloudy",fix:"Stir salt until clear"},{problem:"Watery",fix:"Add texapon"},{problem:"Too thick",fix:"Add water"}],market:[{channel:"Restaurants",detail:"20L jerrycans."},{channel:"Households",detail:"Door to door."},{channel:"Schools",detail:"Monthly contracts."}],startToday:"Make 20L tonight."},
+{id:14,t:"Dishwashing Liquid",emoji:"🍽️",c:"home",imgKey:"dish soap",cost:12000,sales:32000,profit:20000,time:"1.5 hours",where:"Kikuubo / Chemical shops",tagline:"Every home needs it.",materials:[{item:"Sulphonic acid 500ml",cost:"3,000",where:"Chemical shops"},{item:"Texapon 250ml",cost:"1,500",where:"Chemical shops"},{item:"Glycerine 100ml",cost:"1,000",where:"Chemical shops"},{item:"Salt 200g",cost:"300",where:"Local market"},{item:"Lemon perfume",cost:"1,500",where:"Kikuubo"}],tools:["Plastic bucket","Wooden stirrer","Bottles"],steps:["Mix water + sulphonic acid.","Add texapon.","Add glycerine + perfume.","Dissolve salt, add slowly.","Add colour.","Rest 6 hours. Sell 2,000 UGX each."],dos:["Stir gently","Add salt slowly"],donts:["Don't over-thicken","Don't use dirty water"],fails:[{problem:"Watery",fix:"Too much salt"},{problem:"No foam",fix:"More texapon"},{problem:"Cloudy",fix:"Clean water"}],market:[{channel:"Restaurants",detail:"5L jerrycans."},{channel:"Households",detail:"Door-to-door."},{channel:"Shops",detail:"Weekly credit."}],startToday:"Make 10 litres tonight."},
+{id:15,t:"Bar Soap Making",emoji:"🧼",c:"home",imgKey:"bar soap",cost:20000,sales:50000,profit:30000,time:"2 hours + 24h cure",where:"Kikuubo / Local markets",tagline:"Long shelf life.",materials:[{item:"Soap base 2kg",cost:"12,000",where:"Chemical shops"},{item:"Coconut oil 200ml",cost:"2,000",where:"Local market"},{item:"Glycerine 100ml",cost:"1,000",where:"Chemical shops"},{item:"Perfume 30ml",cost:"1,500",where:"Kikuubo"},{item:"Colour",cost:"1,000",where:"Kikuubo"},{item:"Moulds",cost:"3,000",where:"Kikuubo"}],tools:["Double boiler","Wooden spoon","Moulds","Wrapping paper"],steps:["Melt soap base.","Add coconut oil + glycerine.","Add perfume + colour.","Pour into moulds.","Harden 24 hours.","Wrap. Sell 2,500 UGX per bar."],dos:["Double boiler","Grease moulds","Cure 1 week"],donts:["Don't boil soap base","Don't add water","Don't unmould early"],fails:[{problem:"Bars break",fix:"Wait 24 hours"},{problem:"Sweats",fix:"Cure in dry place"},{problem:"Scent fades",fix:"Add perfume at 60°C"}],market:[{channel:"Shops",detail:"10 bars per shop."},{channel:"Supermarkets",detail:"Brand and pack."},{channel:"Export",detail:"East Africa."}],startToday:"Melt and mould tonight."},
+{id:16,t:"Bleach (Jik)",emoji:"🧴",c:"home",imgKey:"bleach bottle",cost:10000,sales:28000,profit:18000,time:"1 hour",where:"Chemical shops",tagline:"Every home uses it.",materials:[{item:"Sodium hypochlorite 2L",cost:"5,000",where:"Chemical shops"},{item:"Caustic soda 100g",cost:"500",where:"Chemical shops"},{item:"Opaque bottles 1L x 15",cost:"4,500",where:"Kikuubo"}],tools:["Plastic bucket","Stirrer","Gloves"],steps:["Wear gloves.","Pour sodium hypochlorite.","Add water.","Add caustic soda.","Rest 2 hours.","Bottle. Sell 2,500 UGX per litre."],dos:["Opaque bottles","Label as poison"],donts:["Never mix with acid","Never use metal","Never store in sunlight"],fails:[{problem:"Loses strength",fix:"Opaque bottles"},{problem:"Fumes",fix:"Don't mix with acid"},{problem:"Yellow",fix:"Contaminated"}],market:[{channel:"Households",detail:"Door-to-door."},{channel:"Restaurants",detail:"5L."},{channel:"Clinics",detail:"Disinfection."}],startToday:"Make 5 litres tonight."},
+{id:17,t:"Detergent Powder",emoji:"🧺",c:"home",imgKey:"detergent powder",cost:25000,sales:55000,profit:30000,time:"2 hours",where:"Kikuubo / Chemical shops",tagline:"Cheap to make, sells fast.",materials:[{item:"Soda ash 5kg",cost:"6,000",where:"Chemical shops"},{item:"STPP 3kg",cost:"8,000",where:"Chemical shops"},{item:"Sodium sulphate 1kg",cost:"3,000",where:"Chemical shops"},{item:"Liquid detergent 500ml",cost:"3,000",where:"Chemical shops"},{item:"Perfume 50ml",cost:"2,000",where:"Kikuubo"},{item:"Packaging bags",cost:"3,000",where:"Kikuubo"}],tools:["Dry basin","Wooden stirrer","Dust mask"],steps:["Mix soda ash + STPP.","Add sodium sulphate.","Add liquid detergent.","Add perfume.","Dry in shade 3 hours.","Pack. Sell 2,000 UGX per sachet."],dos:["Dry place","Dust mask","Airtight packaging"],donts:["Don't mix in humidity","Don't use wet hands"],fails:[{problem:"Clumps",fix:"Mix in dry shade"},{problem:"No perfume",fix:"Add perfume last"},{problem:"Poor cleaning",fix:"Increase STPP 10%"}],market:[{channel:"Households",detail:"Door-to-door."},{channel:"Shops",detail:"20 sachets each."},{channel:"Laundries",detail:"Bulk."}],startToday:"Make 5kg tonight."},
+{id:18,t:"Smearing Oil (Groundnut)",emoji:"🫙",c:"cosm",imgKey:"oil bottle transparent",cost:15000,sales:40000,profit:25000,time:"1.5 hours",where:"Local market / Owino",tagline:"Traditional beauty staple.",materials:[{item:"Groundnuts 2kg",cost:"8,000",where:"Owino"},{item:"Coconut oil 200ml",cost:"2,500",where:"Local market"},{item:"Fragrance",cost:"1,500",where:"Kikuubo"},{item:"Bottles 250ml x 12",cost:"3,000",where:"Kikuubo"}],tools:["Roasting pan","Grinder","Pan","Fine cloth","Bottles"],steps:["Sort groundnuts.","Roast medium heat, stir.","Crush into paste.","Heat paste with water. Oil separates.","Strain through cloth.","Cool, bottle. Sell 3,500 UGX per 250ml."],dos:["Sort seeds","Roast evenly","Strain through fine cloth"],donts:["Don't burn seeds","Don't use dirty cloth","Don't store in sunlight"],fails:[{problem:"Bitter",fix:"Medium heat, stir"},{problem:"Cloudy",fix:"Strain twice"},{problem:"Rancid",fix:"Use within 3 months"}],market:[{channel:"Villages",detail:"Weekly buyers."},{channel:"Salons",detail:"Hair oil."},{channel:"Pharmacies",detail:"Skin oil."}],startToday:"Extract 500ml tonight."},
+{id:19,t:"Shea Butter Processing",emoji:"🧴",c:"cosm",imgKey:"shea butter cream",cost:30000,sales:65000,profit:35000,time:"3 hours",where:"Northern Uganda / Kikuubo",tagline:"Export-quality — Uganda Nilotica.",materials:[{item:"Raw shea nuts 5kg",cost:"15,000",where:"Northern Uganda"},{item:"Fuel for boiling",cost:"3,000",where:"Local market"},{item:"Jars 250ml x 12",cost:"6,000",where:"Kikuubo"},{item:"Labels",cost:"2,000",where:"Kikuubo"}],tools:["Cracking stone","Grinding mill","Boiling pan","Jars"],steps:["Collect shea nuts.","Crack, discard bad.","Wash, dry 2 days.","Grind into paste.","Knead with warm water.","Boil to separate oil.","Skim, cool, whip.","Pack. Sell 8,000 UGX per jar."],dos:["Quality nuts","Knead thoroughly","Boil to remove impurities"],donts:["Don't use mouldy nuts","Don't skip boiling","Don't store in plastic"],fails:[{problem:"Smelly",fix:"Sort carefully"},{problem:"Greasy",fix:"Boil longer"},{problem:"Hard",fix:"Whip at cool temp"}],market:[{channel:"Cosmetics shops",detail:"8,000 per jar."},{channel:"Exports",detail:"Partner with exporters."},{channel:"Online",detail:"Jumia."}],startToday:"Process 2kg nuts tonight."},
+{id:20,t:"Lip Balm Making",emoji:"💄",c:"cosm",imgKey:"lip balm",cost:20000,sales:55000,profit:35000,time:"1 hour",where:"Kikuubo / Chemical shops",tagline:"Small, premium, easy to sell.",materials:[{item:"Beeswax 100g",cost:"4,000",where:"Beekeepers / Kikuubo"},{item:"Coconut oil 200ml",cost:"2,500",where:"Local market"},{item:"Shea butter 100g",cost:"4,000",where:"Local market"},{item:"Essential oil 20ml",cost:"3,000",where:"Kikuubo"},{item:"Lip balm tubes x 20",cost:"5,000",where:"Kikuubo"}],tools:["Double boiler","Spoon","Funnel","Tubes"],steps:["Melt beeswax + coconut oil.","Add shea butter.","Add essential oil.","Pour into tubes.","Cool 2 hours.","Label. Sell 3,500 UGX per tube."],dos:["Clean tubes","Add oil at 60°C"],donts:["Don't overheat","Don't fill too full"],fails:[{problem:"Melts",fix:"More beeswax"},{problem:"Grainy",fix:"Stir while cooling"},{problem:"Scent fades",fix:"Add at 60°C"}],market:[{channel:"Salons",detail:"20 tubes per month."},{channel:"Gift shops",detail:"5,000 each."},{channel:"Online",detail:"Instagram."}],startToday:"Make 10 tubes tonight."},
+{id:21,t:"Hair Oil Making",emoji:"💆",c:"cosm",imgKey:"hair oil bottle",cost:25000,sales:60000,profit:35000,time:"1 hour",where:"Kikuubo / Local market",tagline:"Steady repeat product.",materials:[{item:"Coconut oil 500ml",cost:"6,000",where:"Local market"},{item:"Castor oil 250ml",cost:"4,000",where:"Kikuubo"},{item:"Olive oil 250ml",cost:"4,000",where:"Supermarket"},{item:"Almond oil 100ml",cost:"3,000",where:"Kikuubo"},{item:"Rosemary essential oil",cost:"3,000",where:"Kikuubo"},{item:"Dark bottles 100ml x 15",cost:"5,000",where:"Kikuubo"}],tools:["Mixing bowl","Funnel","Dark bottles"],steps:["Mix coconut + castor.","Add olive + almond.","Warm gently. Add rosemary.","Stir and cool.","Bottle in dark bottles.","Label. Sell 4,000 UGX per bottle."],dos:["Dark bottles","Warm gently"],donts:["Don't overheat","Don't use clear bottles"],fails:[{problem:"Rancid",fix:"Dark glass"},{problem:"Too greasy",fix:"Reduce castor"},{problem:"No growth",fix:"More rosemary"}],market:[{channel:"Salons",detail:"20 bottles per month."},{channel:"Hair shops",detail:"Sell alongside extensions."},{channel:"WhatsApp",detail:"Before/after."}],startToday:"Make 10 bottles tonight."},
+{id:22,t:"Black Soap Making",emoji:"🧼",c:"cosm",imgKey:"african black soap",cost:25000,sales:55000,profit:30000,time:"4 hours",where:"Local markets / Kikuubo",tagline:"Natural African soap.",materials:[{item:"Cocoa pods ash 1kg",cost:"2,000",where:"Local farmers"},{item:"Plantain peels ash 1kg",cost:"2,000",where:"Local farmers"},{item:"Palm kernel oil 2L",cost:"10,000",where:"Local market"},{item:"Shea butter 200g",cost:"5,000",where:"Local market"}],tools:["Boiling pot","Stirrer","Gloves","Moulds","Sieve"],steps:["Burn pods and peels.","Sieve ash, mix with water.","Filter, heat with palm oil.","Stir 2 hours.","Add shea butter.","Cut into blocks. Sell 3,000 UGX per bar."],dos:["Sieve finely","Stir constantly","Cure 1 week"],donts:["Don't use metal pots","Don't skip filtering"],fails:[{problem:"Harsh",fix:"Sieve twice"},{problem:"Liquid",fix:"Boil longer"},{problem:"Falls apart",fix:"Cure 1 week"}],market:[{channel:"Local markets",detail:"3,000 per bar."},{channel:"Exports",detail:"USA/EU."},{channel:"Cosmetic shops",detail:"Natural beauty."}],startToday:"Burn peels tonight."},
+{id:23,t:"Cricket Farming",emoji:"🦗",c:"agri",imgKey:"cricket insect",cost:60000,sales:180000,profit:120000,time:"6 weeks per cycle",where:"Kikuubo / Local breeders",tagline:"New protein market.",materials:[{item:"Cricket eggs or young crickets",cost:"20,000",where:"Local breeders"},{item:"Plastic tubs",cost:"15,000",where:"Kikuubo"},{item:"Egg cartons",cost:"2,000",where:"Local market"},{item:"Feed",cost:"10,000",where:"Local market"},{item:"Heater or warm room",cost:"10,000",where:"Kikuubo"}],tools:["Plastic tubs","Mesh lid","Egg cartons","Bowls"],steps:["Build cage.","Buy starter colony.","Feed daily.","Keep warm 25-30°C.","Harvest at 6 weeks.","Sell 20,000 UGX per kg."],dos:["Warm 25-30°C","Change feed daily","Provide hiding places"],donts:["Don't let cold","Don't overcrowd","Don't use chemicals"],fails:[{problem:"Stop breeding",fix:"Keep warm"},{problem:"Die fast",fix:"Split tubs"},{problem:"Mould",fix:"Remove old food"}],market:[{channel:"Restaurants",detail:"25,000 per kg."},{channel:"Health shops",detail:"30,000 per kg."},{channel:"Export",detail:"East Africa."}],startToday:"Buy starter colony tonight."},
+{id:24,t:"Grasshopper Rearing",emoji:"🦗",c:"agri",imgKey:"grasshopper",cost:50000,sales:150000,profit:100000,time:"3 months per cycle",where:"Local markets / Kikuubo",tagline:"Traditional delicacy.",materials:[{item:"Grasshoppers or eggs",cost:"20,000",where:"Local breeders"},{item:"Wire mesh cage",cost:"15,000",where:"Kikuubo"},{item:"Fresh grass",cost:"5,000",where:"Local"},{item:"Water containers",cost:"3,000",where:"Kikuubo"},{item:"Cage frame",cost:"7,000",where:"Kikuubo"}],tools:["Wire mesh cage","Water container","Fresh grass"],steps:["Build cage.","Collect grasshoppers.","Feed fresh grass daily.","Keep cage dry.","Harvest at 3 months.","Sell 15,000 UGX per kg."],dos:["Keep dry","Change feed daily"],donts:["Don't let cage wet","Don't feed mouldy grass","Don't use pesticides"],fails:[{problem:"Disease",fix:"Keep dry and ventilated"},{problem:"Slow growth",fix:"Fresh feed"},{problem:"Cannibalism",fix:"Expand cage"}],market:[{channel:"Local markets",detail:"15,000 per kg."},{channel:"Restaurants",detail:"30,000 prepared."},{channel:"Supermarkets",detail:"40,000 dried."}],startToday:"Build cage this week."},
+{id:25,t:"Oyster Mushroom Growing",emoji:"🍄",c:"agri",imgKey:"oyster mushroom",cost:250000,sales:500000,profit:250000,time:"4 weeks per cycle",where:"NARO Kawanda / Local ginneries",tagline:"High-value crop.",materials:[{item:"Mushroom spawn (5 bottles)",cost:"15,000",where:"NARO Kawanda"},{item:"Cottonseed hulls or coffee husks",cost:"60,000",where:"Local ginneries"},{item:"Plastic bags",cost:"20,000",where:"Kikuubo"},{item:"PVC rings",cost:"15,000",where:"Kikuubo"},{item:"Steaming drum",cost:"100,000",where:"Local hardware"},{item:"Fuel for steaming",cost:"40,000",where:"Local market"}],tools:["Dark humid room","Steaming drum","Plastic bags","PVC rings","Sprayer"],steps:["Build dark humid room.","Buy spawn from NARO.","Prepare substrate.","Steam 3-4 hours.","Cool. Mix spawn with substrate.","Bag with PVC rings.","Incubate 14 days.","Hang. Cut slits.","Harvest when caps open.","Sell 8,000 UGX per kg."],dos:["NARO spawn","Steam 3-4 hours","Dark humid room"],donts:["Don't use contaminated spawn","Don't expose to sunlight","Don't harvest late"],fails:[{problem:"Mould",fix:"Steam 3-4 hours"},{problem:"No growth",fix:"Fresh spawn"},{problem:"Small mushrooms",fix:"More humidity"}],market:[{channel:"Restaurants",detail:"8,000 per kg."},{channel:"Supermarkets",detail:"5,000 per tray."},{channel:"Exports",detail:"Kenya, Rwanda."}],startToday:"Visit NARO this week."},
+{id:26,t:"Broiler Chicken (Small)",emoji:"🐔",c:"agri",imgKey:"broiler chicken",cost:280000,sales:600000,profit:320000,time:"8 weeks",where:"Local hatcheries / NAGRC",tagline:"8-week turnaround.",materials:[{item:"Day-old chicks 100",cost:"230,000",where:"Local hatcheries"},{item:"Starter feed 50kg",cost:"100,000",where:"Agrovet"},{item:"Finisher feed 50kg",cost:"90,000",where:"Agrovet"},{item:"Vaccines",cost:"15,000",where:"Agrovet"},{item:"Vitamins",cost:"10,000",where:"Agrovet"}],tools:["Chicken house","Brooder","Feeders and drinkers","Wood shavings"],steps:["Build chicken house.","Buy 100 chicks.","Brooder at 32°C.","Feed starter then finisher.","Clean water always.","Vaccinate on schedule.","Sell at 8 weeks."],dos:["Warm brooder 32°C","Bulk feed","Vaccinate on time"],donts:["Don't overcrowd","Don't skip vaccination","Don't sell early"],fails:[{problem:"Chicks die",fix:"Brooder 32°C"},{problem:"Slow growth",fix:"Quality feed"},{problem:"Disease",fix:"Vaccinate"}],market:[{channel:"Hotels",detail:"15,000 per bird."},{channel:"Restaurants",detail:"Weekly."},{channel:"Neighbours",detail:"12,000 per bird."}],startToday:"Buy 100 chicks this week."},
+{id:27,t:"Rabbit Farming",emoji:"🐰",c:"agri",imgKey:"rabbit",cost:150000,sales:350000,profit:200000,time:"3 months per cycle",where:"Local breeders",tagline:"Fast breeders.",materials:[{item:"Breeding rabbits (2F + 1M)",cost:"90,000",where:"Local breeders"},{item:"Wire mesh and wood",cost:"40,000",where:"Hardware"},{item:"Feed (pellets, hay)",cost:"20,000",where:"Agrovet"},{item:"Water bottles",cost:"10,000",where:"Kikuubo"}],tools:["Hutches","Feeders","Water bottles","Nest boxes"],steps:["Build hutches.","Buy 2F + 1M.","Feed pellets + hay.","Water in bottles.","Clean weekly.","Sell at 3 months."],dos:["Clean hutches","Dry greens","Water bottles"],donts:["Don't feed wet greens","Don't overcrowd"],fails:[{problem:"Diarrhoea",fix:"Dry greens"},{problem:"Slow breeding",fix:"Wait 6 months"},{problem:"Fighting",fix:"Separate adults"}],market:[{channel:"Restaurants",detail:"35,000 per rabbit."},{channel:"Neighbours",detail:"25,000 each."},{channel:"Breeders",detail:"Sell young."}],startToday:"Build hutch this week."},
+{id:28,t:"Quail Farming",emoji:"🐦",c:"agri",imgKey:"quail bird",cost:150000,sales:400000,profit:250000,time:"6 weeks",where:"Local breeders",tagline:"Quail eggs premium.",materials:[{item:"Quail chicks 50",cost:"100,000",where:"Local breeders"},{item:"Wire mesh cages",cost:"30,000",where:"Hardware"},{item:"Quail mash",cost:"15,000",where:"Agrovet"},{item:"Small drinkers/feeders",cost:"5,000",where:"Kikuubo"}],tools:["Wire mesh cage","Small drinkers","Feeders","Egg trays"],steps:["Build quail cage.","Buy chicks.","High-protein mash.","Clean water.","Collect eggs daily.","Sell 500-1,000 UGX per egg."],dos:["High-protein mash","Collect eggs daily"],donts:["Don't use large drinkers","Don't feed chicken mash","Don't disturb at night"],fails:[{problem:"Stop laying",fix:"Quiet environment"},{problem:"Drown",fix:"Shallow drinkers"},{problem:"Low eggs",fix:"Quail mash"}],market:[{channel:"Hotels",detail:"1,000 per egg."},{channel:"Health shops",detail:"500 per egg."},{channel:"Breeders",detail:"Chicks 2,000."}],startToday:"Buy 50 chicks this week."},
+{id:29,t:"Beaded Jewelry Making",emoji:"📿",c:"craft",imgKey:"colorful beads jewelry",cost:30000,sales:80000,profit:50000,time:"3 hours per 10 pieces",where:"Kikuubo / Craft markets",tagline:"Creative, sells online.",materials:[{item:"Assorted beads 500g",cost:"15,000",where:"Kikuubo"},{item:"Strong string (nylon)",cost:"2,000",where:"Kikuubo"},{item:"Clasps and rings",cost:"3,000",where:"Kikuubo"},{item:"Pliers",cost:"5,000",where:"Hardware"},{item:"Gift bags",cost:"5,000",where:"Kikuubo"}],tools:["Bead board","Pliers","Scissors","Thread"],steps:["Buy beads, string, clasps.","Design on bead board.","Thread beads.","Tie knots.","Attach clasp.","Package. Sell 5,000-50,000 UGX."],dos:["Strong string","Double-knot","Photograph for online"],donts:["Don't use weak thread","Don't skip clasps"],fails:[{problem:"Breaks",fix:"Nylon or double thread"},{problem:"Loose clasps",fix:"Squeeze firmly"},{problem:"Slow sales",fix:"Good photos"}],market:[{channel:"Online",detail:"Instagram, Jumia."},{channel:"Gift shops",detail:"Supply malls."},{channel:"Tourist areas",detail:"Entebbe."}],startToday:"Make 5 pieces tonight."},
+{id:30,t:"Paper Bag Making",emoji:"🛍️",c:"craft",imgKey:"paper bag craft",cost:25000,sales:70000,profit:45000,time:"4 hours per 50 bags",where:"Kikuubo / Printing shops",tagline:"Eco-friendly.",materials:[{item:"Brown kraft paper roll",cost:"15,000",where:"Kikuubo"},{item:"Strong glue",cost:"3,000",where:"Kikuubo"},{item:"String handles",cost:"4,000",where:"Kikuubo"},{item:"Cardboard (reinforcement)",cost:"3,000",where:"Kikuubo"}],tools:["Scissors","Ruler","Glue brush","Template"],steps:["Buy kraft paper.","Cut rectangles.","Fold and glue sides.","Reinforce bottom.","Attach handles.","Print logo. Sell 500-2,000 UGX each."],dos:["Strong glue","Reinforce bottoms"],donts:["Don't use thin paper","Don't skip reinforcement"],fails:[{problem:"Tear",fix:"100gsm paper"},{problem:"Weak handles",fix:"Double string"},{problem:"Slow sales",fix:"Approach shops"}],market:[{channel:"Shops",detail:"Monthly supply."},{channel:"Events",detail:"Custom printed."},{channel:"Supermarkets",detail:"Bulk."}],startToday:"Make 20 bags tonight."},
+{id:31,t:"Groundnut Cooking Oil",emoji:"🛢️",c:"oil",imgKey:"groundnut oil",cost:25000,sales:60000,profit:35000,time:"2 hours per 2 litres",where:"Owino / Local groundnut farmers",tagline:"Pure cooking oil from groundnuts — no chemicals.",materials:[{item:"Raw groundnuts 4kg",cost:"16,000",where:"Owino / Local farmers"},{item:"Clean water 3 litres",cost:"0",where:"Home"},{item:"Clean bottles 500ml x 4",cost:"3,000",where:"Kikuubo"},{item:"Fine cloth (cotton)",cost:"2,000",where:"Local market"},{item:"Fuel (charcoal or firewood)",cost:"2,000",where:"Local market"},{item:"Labels",cost:"2,000",where:"Kikuubo"}],tools:["Roasting pan","Wooden spoon","Grinding mill or blender","Large boiling pan","Cotton cloth","Clean bottles"],steps:["**Sort the nuts:** Remove bad nuts, stones, mouldy ones.","**Roast slowly:** Medium heat 12-15 mins until golden. Stir non-stop.","**Cool:** 10 mins at room temperature.","**Grind to paste:** Smooth, like peanut butter.","**Add water:** 1 litre warm water, mix 2 mins. Oil separates.","**Knead and squeeze:** 5-10 mins. Oil floats to top.","**Extract first oil:** Scoop off floating oil.","**Second extraction:** Add 1L warm water, knead 5 mins.","**Boil the oil:** Medium fire 15 mins. Do not smoke.","**Filter through cloth:** Remove remaining solids.","**Cool and bottle:** Cool 2 hours. Bottle in glass. Label."],dos:["Sort nuts carefully","Roast medium heat, stir non-stop","Use warm water for extraction","Strain twice through fine cloth","Store in cool dark place"],donts:["Don't use mouldy nuts","Don't burn nuts","Don't use dirty bottles","Don't store in plastic 3+ months","Don't expose to sunlight"],fails:[{problem:"Bitter",fix:"Burn the nuts — roast medium, stir constantly"},{problem:"Dark brown",fix:"Over-roasted. Light golden only"},{problem:"Cloudy",fix:"Strain twice. Let settle overnight"},{problem:"Low yield",fix:"Nuts old or dry. Use fresh. Knead longer"},{problem:"Rancid after 2 weeks",fix:"Bottle not dry or stored in heat"}],market:[{channel:"Households",detail:"Door-to-door. 15,000-20,000 per litre."},{channel:"Restaurants",detail:"5L or 20L jerrycans."},{channel:"Health food shops",detail:"20,000 per litre."},{channel:"WhatsApp",detail:"Free delivery over 3 litres."},{channel:"Supermarkets",detail:"UNBS mark and labelling."}],startToday:"Buy 4kg of groundnuts today. Make your first 2 litres tonight."},
+{id:32,t:"Avocado Cooking Oil",emoji:"🥑",c:"oil",imgKey:"avocado oil",cost:20000,sales:55000,profit:35000,time:"3 hours per 1 litre",where:"Local avocado farmers / Owino / Nakasero",tagline:"Premium healthy oil.",materials:[{item:"Ripe avocados 10kg",cost:"12,000",where:"Owino / Local farmers"},{item:"Clean water 2 litres",cost:"0",where:"Home"},{item:"Clean glass bottles 250ml x 4",cost:"3,000",where:"Kikuubo"},{item:"Fine cotton cloth",cost:"2,000",where:"Local market"},{item:"Fuel",cost:"2,000",where:"Local market"},{item:"Labels",cost:"1,000",where:"Kikuubo"}],tools:["Knife and chopping board","Blender or masher","Large bowl","Drying tray","Pan for heating","Cotton cloth and bottle"],steps:["**Pick ripe avocados:** Soft when squeezed.","**Peel and remove seed:** Scoop flesh.","**Mash into paste:** Blender or masher.","**Dry the paste (optional):** Shade 4-6 hours for more oil.","**Knead with water:** 1L warm water, knead 5 mins.","**Scoop the oil:** Green-gold oil floats to top.","**Second extraction:** 500ml warm water, knead 5 mins.","**Boil gently:** LOW fire 10 mins. No smoke.","**Cool and filter:** Fine cotton cloth into clean bottle.","**Store:** Dark glass bottle, cool place."],dos:["Fully ripe avocados","Clean dry area","Warm water for kneading","Dark glass bottles","Keep away from strong smells"],donts:["Don't use rotten avocados","Don't boil on high heat","Don't use plastic","Don't expose to sunlight","Don't mix with other oils"],fails:[{problem:"Low yield",fix:"Avocados not ripe. Try drying step"},{problem:"Dark green",fix:"Over-ripe or boiled too long"},{problem:"Bad smell",fix:"Rotten fruits or dirty bottles"},{problem:"Cloudy in fridge",fix:"Normal — becomes clear at room temp"},{problem:"Bitter",fix:"Overheated. Keep fire low"}],market:[{channel:"Health food shops",detail:"30,000-50,000 per 250ml."},{channel:"Salons and spas",detail:"Hair and skin care."},{channel:"Expat market",detail:"Via Jumia, Instagram"},{channel:"Restaurants",detail:"Upscale salads."},{channel:"Export",detail:"Kenya, Rwanda, Europe at $10-20 per 250ml"}],startToday:"Buy 10 ripe avocados this week. Make your first 500ml."},
+{id:33,t:"Sunflower Cooking Oil",emoji:"🌻",c:"oil",imgKey:"sunflower oil",cost:22000,sales:55000,profit:33000,time:"2 hours per 1.5 litres",where:"Local sunflower farmers / Owino / Nakasero",tagline:"Cheap and easy to make.",materials:[{item:"Raw sunflower seeds 5kg",cost:"15,000",where:"Owino / Local farmers"},{item:"Clean water 2 litres",cost:"0",where:"Home"},{item:"Clean bottles 500ml x 3",cost:"3,000",where:"Kikuubo"},{item:"Fine cotton cloth",cost:"2,000",where:"Local market"},{item:"Fuel",cost:"2,000",where:"Local market"}],tools:["Dry wide pan for roasting","Wooden spoon","Grinding mill or blender","Kneading bowl","Cotton cloth","Clean glass bottles"],steps:["**Sort seeds:** Remove stones, dirt, black kernels.","**Roast gently:** Medium fire 8-10 mins until nutty.","**Cool:** 10 mins on tray.","**Grind to paste:** Thick brown paste.","**Knead with warm water:** 1L, knead 8 mins.","**Scoop oil:** Floating oil into separate pan.","**Second extraction:** 500ml warm water, knead 5 mins.","**Boil gently:** LOW fire 10 mins. No smoke.","**Filter through cloth:** Clear and pure.","**Cool and bottle:** 2 hours. Glass bottles. Label."],dos:["Dry, clean seeds","Roast medium heat only","Knead slowly with warm water","Glass bottles, dark cool place","Label with name and date"],donts:["Don't use mouldy seeds","Don't burn seeds","Don't store in plastic long-term","Don't expose to sunlight","Don't mix with other oils"],fails:[{problem:"Bitter",fix:"Burnt seeds. Medium heat, stir"},{problem:"Dark brown",fix:"Over-roasted. Light golden only"},{problem:"Low yield",fix:"Old seeds. Use fresh"},{problem:"Bad smell",fix:"Bottles not dry or stored in sunlight"},{problem:"Cloudy",fix:"Strain again through finer cloth"}],market:[{channel:"Households",detail:"12,000-15,000 per litre."},{channel:"Restaurants",detail:"5L to 20L."},{channel:"Supermarkets",detail:"500ml branded bottles."},{channel:"Market stalls",detail:"Owino, Nakasero."},{channel:"Bulk to institutions",detail:"Schools, prisons, hospitals."}],startToday:"Buy 5kg of sunflower seeds from Owino this week."}
+];
+
+/* ============================================================
+   STATE & STORAGE
+   ============================================================ */
+var LS_FAV = "ajon_favs_v9";
+var LS_HIST = "ajon_hist_v9";
+var LS_NOTES = "ajon_notes_v9";
+var LS_CUSTOM = "ajon_custom_v9";
+var LS_CONFIG = "ajon_config_v9";
+var LS_INSTALL = "ajon_install_v9";
+var LS_USED_PW = "ajon_used_pw_v9";
+var LS_SUB_END = "ajon_sub_end_v9";
+var LS_USERS = "ajon_users_v9";
+
+var favs = readJSON(LS_FAV, []);
+var hist = readJSON(LS_HIST, []);
+var notes = readJSON(LS_NOTES, []);
+var customTuts = readJSON(LS_CUSTOM, []);
+var appConfig = readJSON(LS_CONFIG, SERVER_CONFIG.defaults);
+var usedPasswords = readJSON(LS_USED_PW, []);
+var subscriptionEndDate = readJSON(LS_SUB_END, 0);
+
+var installTime = readJSON(LS_INSTALL, null);
+if (!installTime) { installTime = Date.now(); writeJSON(LS_INSTALL, installTime); }
+
+/* ============ LIVE USER COUNTER — grows forever ============ */
+var USER_BASE = 208400;
+var USER_START = 1000;
+var userCount = readJSON(LS_USERS, USER_START);
+if (userCount < USER_START) userCount = USER_START;
+var userTickTimer = null;
+
+var TUTORIALS = [];
+var currentTab = "tutorials";
+var currentQuery = "";
+var currentCategory = "all";
+var askToken = 0;
+var tutOffset = 0;
+var TUT_PAGE = 12;
+var searchTimer = null;
+var trialTickTimer = null;
+var currentlySpeakingId = null;
+var chatMsgs = [];
+var currentAssistant = "general";
+
+/* ============================================================
+   UTILITIES
+   ============================================================ */
+function readJSON(key, fb) {
+  try { var r = localStorage.getItem(key); if (!r) return fb; var v = JSON.parse(r); return (v == null) ? fb : v; }
+  catch (e) { return fb; }
+}
+function writeJSON(key, val) { try { localStorage.setItem(key, JSON.stringify(val)); } catch (e) {} }
+function fmt(n) { n = Number(n) || 0; try { return n.toLocaleString("en-US"); } catch (e) { return String(n); } }
+function escapeHTML(s) {
+  return String(s).replace(/[&<>"']/g, function (c) {
+    return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+  });
+}
+function byId(id) { return document.getElementById(id); }
+function formatDate(ts) { try { var d = new Date(ts); return d.toLocaleDateString() + " " + d.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }); } catch (e) { return ""; } }
+function formatDateShort(ts) { try { var d = new Date(ts); return d.toLocaleDateString(undefined, { year: "numeric", month: "short", day: "numeric" }); } catch (e) { return ""; } }
+function formatUserCount(n) {
+  n = Number(n) || 0;
+  if (n >= 1000000) return (n / 1000000).toFixed(2) + "M";
+  if (n >= 1000) return (n / 1000).toFixed(1) + "k";
+  return String(n);
+}
+
+/* ============================================================
+   LIVE USER COUNTER — counts from current up to base, then keeps growing forever
+   ============================================================ */
+function animateUserCount() {
+  var el = byId("userBadge");
+  if (!el) return;
+  /* If already past base, just show current and keep ticking */
+  if (userCount >= USER_BASE) {
+    el.textContent = formatUserCount(userCount);
+    startUserTick();
+    return;
+  }
+  var from = Math.max(USER_START, userCount);
+  var to = USER_BASE;
+  var startTime = Date.now();
+  var duration = 2600;
+  function step() {
+    var elapsed = Date.now() - startTime;
+    var t = Math.min(elapsed / duration, 1);
+    t = 1 - Math.pow(1 - t, 3);
+    var current = Math.floor(from + (to - from) * t);
+    el.textContent = formatUserCount(current);
+    userCount = current;
+    if (t < 1) requestAnimationFrame(step);
+    else {
+      userCount = USER_BASE;
+      writeJSON(LS_USERS, userCount);
+      el.textContent = formatUserCount(userCount);
+      startUserTick();
+    }
+  }
+  requestAnimationFrame(step);
+}
+
+function startUserTick() {
+  if (userTickTimer) clearInterval(userTickTimer);
+  /* Every 2.8s add 1-6 users — feels live but realistic */
+  userTickTimer = setInterval(function () {
+    var inc = Math.floor(Math.random() * 5) + 1;
+    userCount += inc;
+    var el = byId("userBadge");
+    if (el) el.textContent = formatUserCount(userCount);
+    /* Save every ~10 ticks */
+    if (Math.random() < 0.12) writeJSON(LS_USERS, userCount);
+  }, 2800);
+}
+
+/* ============================================================
+   TRIAL & ACCESS
+   ============================================================ */
+function trialMinutesLeft() {
+  var trialMs = (appConfig.trialMinutes || 5) * 60 * 1000;
+  return Math.max(0, trialMs - (Date.now() - installTime));
+}
+function isTrialActive() { return trialMinutesLeft() > 0; }
+function isSubscribed() { return subscriptionEndDate && subscriptionEndDate > Date.now(); }
+function hasFullAccess() { return isSubscribed() || isTrialActive(); }
+function canAccess(tut) {
+  if (hasFullAccess()) return true;
+  return Number(tut.id) <= 2;
+}
+function formatTrialTime(ms) {
+  var s = Math.ceil(ms / 1000);
+  var m = Math.floor(s / 60);
+  var sec = s % 60;
+  return m + ":" + (sec < 10 ? "0" : "") + sec;
+}
+function updateTrialBar() {
+  var bar = byId("trialBar");
+  if (!bar) return;
+  if (isSubscribed()) {
+    var daysLeft = Math.ceil((subscriptionEndDate - Date.now()) / (1000 * 60 * 60 * 24));
+    bar.innerHTML = '<div class="trial-bar">✅ Full access active — ' + daysLeft + ' days remaining</div>';
+    return;
+  }
+  if (isTrialActive()) {
+    bar.innerHTML = '<div class="trial-bar">🎁 Free preview: <span class="time">' + formatTrialTime(trialMinutesLeft()) + '</span> — enjoy all tutorials</div>';
+    return;
+  }
+  bar.innerHTML = '<div class="trial-bar">🔒 Preview ended — Unlock 1500+ ideas in the Unlock tab</div>';
+}
+function startTrialTick() {
+  if (trialTickTimer) clearInterval(trialTickTimer);
+  trialTickTimer = setInterval(function () {
+    updateTrialBar();
+    if (!isTrialActive() && !isSubscribed()) renderTutorials(true);
+  }, 1000);
+}
+
+/* ============================================================
+   BUILD TUTORIALS
+   ============================================================ */
+function buildTutorials() {
+  var out = [];
+  for (var i = 0; i < TUTORIALS_DATA.length; i++) out.push(TUTORIALS_DATA[i]);
+  for (var j = 0; j < customTuts.length; j++) if (customTuts[j] && customTuts[j].t) out.push(customTuts[j]);
+  for (var k = 0; k < out.length; k++) {
+    out[k]._s = (out[k].t + " " + (out[k].c || "") + " " + (out[k].k || []).join(" ") + " " + (out[k].tagline || "")).toLowerCase();
+  }
+  return out;
+}
+
+/* ============================================================
+   SEARCH & RENDER
+   ============================================================ */
+function searchT(q) { currentQuery = (q === undefined || q === null) ? "" : String(q); tutOffset = 0; renderTutorials(true); }
+
+function renderTutorials(reset) {
+  var list = byId("tutList");
+  var countEl = byId("tutCount");
+  if (!list) return;
+
+  var query = currentQuery.toLowerCase().trim();
+  var items = TUTORIALS.slice();
+
+  if (currentCategory !== "all") {
+    var filtered = [];
+    for (var i = 0; i < items.length; i++) if (items[i].c === currentCategory) filtered.push(items[i]);
+    items = filtered;
+  }
+  if (query) {
+    var filtered2 = [];
+    for (var j = 0; j < items.length; j++) if (items[j]._s && items[j]._s.indexOf(query) > -1) filtered2.push(items[j]);
+    items = filtered2;
+  }
+  if (!query && currentCategory === "all") {
+    for (var k = items.length - 1; k > 0; k--) {
+      var r = Math.floor(Math.random() * (k + 1));
+      var tmp = items[k]; items[k] = items[r]; items[r] = tmp;
+    }
+  }
+  if (reset) { list.innerHTML = ""; tutOffset = 0; }
+
+  if (!items.length) {
+    list.innerHTML = '<div class="empty"><div class="bigicon">😕</div><h3>No tutorial matched</h3><p>Try: candy, soap, mushroom, chicken, oil</p></div>';
+    if (countEl) countEl.textContent = "0 results";
+    return;
+  }
+
+  if (reset) {
+    list.insertAdjacentHTML("beforeend",
+      '<div class="ad-card" onclick="openAdvertModal()">' +
+      '<span class="ad-ribbon">SPONSOR</span>' +
+      '<div class="ad-emoji">📢</div>' +
+      '<div class="ad-body">' +
+      '<div class="ad-title">Advertise Your Business Here</div>' +
+      '<div class="ad-text">Reach <strong>208,000+</strong> Ugandan business owners for just <strong>' + fmt(ADVERT_INFO.price) + ' ' + ADVERT_INFO.currency + ' per week</strong>. Banner, tap-to-call, real customers.</div>' +
+      '<span class="ad-cta">👉 Tap to Advertise</span>' +
+      '</div></div>');
+  }
+
+  if (!hasFullAccess()) {
+    list.insertAdjacentHTML("beforeend",
+      '<div class="free-bar"><strong>🔓 Preview ended</strong>' +
+      'Unlock 1500+ ideas for ' + fmt(PAYMENT_INFO.amount) + ' ' + PAYMENT_INFO.currency + ' / month — see the Unlock tab</div>');
+  }
+
+  if (countEl) countEl.textContent = items.length + " ideas" + (query ? ' for "' + currentQuery + '"' : "");
+
+  var end = Math.min(tutOffset + TUT_PAGE, items.length);
+  var html = "";
+  for (var m = tutOffset; m < end; m++) html += cardHTML(items[m]);
+  list.insertAdjacentHTML("beforeend", html);
+  tutOffset = end;
+
+  var old = byId("loadMoreWrap");
+  if (old && old.parentNode) old.parentNode.removeChild(old);
+
+  if (tutOffset < items.length) {
+    list.insertAdjacentHTML("beforeend",
+      '<div id="loadMoreWrap" style="padding:0 16px 20px;"><button class="btn" onclick="loadMoreTut()">Load ' + TUT_PAGE + ' More (' + (items.length - tutOffset) + ' left)</button></div>');
+  }
+}
+function loadMoreTut() { renderTutorials(false); }
+function filterCat(cat) {
+  currentCategory = cat;
+  var chips = document.querySelectorAll(".cat-chip");
+  for (var i = 0; i < chips.length; i++) chips[i].classList.toggle("active", chips[i].getAttribute("data-cat") === cat);
+  tutOffset = 0;
+  renderTutorials(true);
+}
+function cardHTML(t) {
+  var locked = !canAccess(t);
+  var primarySrc = t.img || tutImg(t.imgKey, t.id * 7);
+  var fb = svgFallback(t.emoji, t.t);
+  var fav = isFav(t.id);
+  return '<div class="card' + (locked ? " locked" : "") + '">' +
+    '<div class="imgwrap">' + imgTag(primarySrc, fb, t.t) +
+    '<span class="badge' + (locked ? " lock" : "") + '">' + (locked ? "🔒 Locked" : (t.emoji || "💰") + ' UGX ' + fmt(t.profit) + ' profit') + '</span>' +
+    '<button class="fav" data-fav="' + t.id + '" onclick="toggleFav(' + t.id + ', event)">' + (fav ? "❤️" : "🤍") + '</button></div>' +
+    '<h3 class="card-title">' + (t.emoji || "") + ' ' + escapeHTML(t.t) + '</h3>' +
+    '<span class="chip">' + escapeHTML(catName(t.c)) + '</span>' +
+    '<span class="cost">Start cost: UGX ' + fmt(t.cost) + ' • Sales: UGX ' + fmt(t.sales) + '</span>' +
+    '<div class="profit">💰 Profit: UGX ' + fmt(t.profit) + ' per batch</div>' +
+    '<button class="btn' + (locked ? " grey" : "") + '" onclick="openTutorial(' + t.id + ')">' + (locked ? "🔒 Unlock to View" : "View Full Tutorial") + '</button></div>';
+}
+function catName(id) {
+  for (var i = 0; i < CATEGORIES.length; i++) if (CATEGORIES[i].id === id) return CATEGORIES[i].name;
+  return id;
+}
+
+/* ============================================================
+   ADVERTISE MODAL
+   ============================================================ */
+function openAdvertModal() { var m = byId("advertModal"); if (m) m.classList.add("open"); }
+function closeAdvertModal() { var m = byId("advertModal"); if (m) m.classList.remove("open"); }
+
+/* ============================================================
+   DETAIL SHEET
+   ============================================================ */
+function detailHTML(t) {
+  var stepsHTML = "";
+  var stepImgs = t.stepImgs || [];
+  for (var i = 0; i < (t.steps || []).length; i++) {
+    var stepSrc = stepImgs[i] || tutImg(t.imgKey, (t.id * 11) + i + 1);
+    var stepFb = svgFallback(t.emoji, "Step " + (i + 1) + " — " + t.t);
+    stepsHTML += '<div class="step">' + imgTag(stepSrc, stepFb, t.t + " step " + (i + 1)) +
+      '<div class="step-head"><span class="step-num">' + (i + 1) + '</span><span class="step-title">Step ' + (i + 1) + '</span></div>' +
+      '<p class="step-text">' + escapeHTML(t.steps[i]) + '</p></div>';
+  }
+  var matHTML = "";
+  if (t.materials && t.materials.length) {
+    matHTML = '<div class="mat-box"><h4>🛒 MATERIALS & WHERE TO GET THEM</h4>';
+    for (var m = 0; m < t.materials.length; m++) {
+      var mat = t.materials[m];
+      matHTML += '<div class="mat-item"><div class="mi-name">' + escapeHTML(mat.item) + (mat.where ? '<span class="mi-where">📍 ' + escapeHTML(mat.where) + '</span>' : '') + '</div><div class="mi-cost">' + escapeHTML(mat.cost) + ' UGX</div></div>';
+    }
+    matHTML += '</div>';
+  }
+  var toolsHTML = "";
+  if (t.tools && t.tools.length) toolsHTML = '<div class="mat-box"><h4>🔧 TOOLS NEEDED</h4><div class="mat-item"><div class="mi-name">' + t.tools.map(escapeHTML).join(' • ') + '</div></div></div>';
+  var doHTML = "";
+  if (t.dos && t.dos.length) { doHTML = '<div class="dolist"><h4>✅ DO</h4><ul>'; for (var a = 0; a < t.dos.length; a++) doHTML += "<li>" + escapeHTML(t.dos[a]) + "</li>"; doHTML += "</ul></div>"; }
+  var dontHTML = "";
+  if (t.donts && t.donts.length) { dontHTML = '<div class="dontlist"><h4>⛔ DON\'T</h4><ul>'; for (var b = 0; b < t.donts.length; b++) dontHTML += "<li>" + escapeHTML(t.donts[b]) + "</li>"; dontHTML += "</ul></div>"; }
+  var failHTML = "";
+  if (t.fails && t.fails.length) { failHTML = '<div class="failbox"><strong>⚠️ FAIL FIX</strong>'; for (var f = 0; f < t.fails.length; f++) failHTML += '<div class="fail-item"><strong>' + escapeHTML(t.fails[f].problem) + ':</strong> ' + escapeHTML(t.fails[f].fix) + '</div>'; failHTML += '</div>'; }
+  var marketHTML = "";
+  if (t.market && t.market.length) { marketHTML = '<div class="market-box"><h4>💰 WHERE TO SELL</h4>'; for (var mk = 0; mk < t.market.length; mk++) marketHTML += '<div class="market-item"><strong>' + escapeHTML(t.market[mk].channel) + '</strong>' + escapeHTML(t.market[mk].detail) + '</div>'; marketHTML += '</div>'; }
+  var startHTML = t.startToday ? '<div class="start-today"><strong>🚀 START TODAY</strong>' + escapeHTML(t.startToday) + '</div>' : "";
+  var fav = isFav(t.id);
+  var heroSrc = t.img || tutImg(t.imgKey, t.id * 7);
+  var heroFb = svgFallback(t.emoji, t.t);
+
+  return '<div class="sheet-head">' +
+    '<button class="back-btn" onclick="closeDetail()">←</button>' +
+    '<div class="sheet-title">' + escapeHTML(t.t) + '</div>' +
+    '<button class="speak-btn" id="speakBtn" onclick="toggleSpeak(' + t.id + ')" title="Listen">🔊</button></div>' +
+    '<div class="sheet-body"><div class="card"><div class="imgwrap">' + imgTag(heroSrc, heroFb, t.t) +
+    '<span class="badge">' + (t.emoji || "💰") + ' UGX ' + fmt(t.profit) + ' profit</span>' +
+    '<button class="fav" data-fav="' + t.id + '" onclick="toggleFav(' + t.id + ', event)">' + (fav ? "❤️" : "🤍") + '</button></div>' +
+    '<h3 class="card-title">' + escapeHTML(t.t) + '</h3>' +
+    '<span class="chip">' + escapeHTML(catName(t.c)) + '</span>' +
+    (t.tagline ? '<p class="muted" style="margin-bottom:8px;">' + escapeHTML(t.tagline) + '</p>' : '') +
+    '<span class="cost">Start cost: UGX ' + fmt(t.cost) + ' • Sales: UGX ' + fmt(t.sales) + '</span>' +
+    '<span class="cost">⏱️ Time: ' + escapeHTML(t.time || "Varies") + '</span>' +
+    '<div class="profit">💰 Profit: UGX ' + fmt(t.profit) + ' per batch</div>' +
+    '<button class="btn speak" onclick="toggleSpeak(' + t.id + ')">🔊 Listen to Tutorial</button></div>' +
+    matHTML + toolsHTML + stepsHTML +
+    '<div style="padding:0 16px;">' + doHTML + dontHTML + failHTML + marketHTML + startHTML + '</div></div>';
+}
+function openTutorial(id) {
+  var nid = Number(id), found = null;
+  for (var i = 0; i < TUTORIALS.length; i++) if (TUTORIALS[i].id === nid) { found = TUTORIALS[i]; break; }
+  if (!found) return;
+  if (!canAccess(found)) { showTab("video"); return; }
+  var sheet = byId("detailSheet");
+  sheet.innerHTML = detailHTML(found);
+  sheet.classList.add("open");
+  sheet.scrollTop = 0;
+}
+function closeDetail() { stopSpeaking(); var s = byId("detailSheet"); if (s) s.classList.remove("open"); }
+
+/* ============================================================
+   TEXT-TO-SPEECH
+   ============================================================ */
+function stripMD(s) { return String(s || "").replace(/\*\*/g, "").replace(/[*_`#]/g, ""); }
+function buildSpeechText(t) {
+  var parts = [];
+  parts.push("Tutorial: " + t.t + ". Category: " + catName(t.c) + ".");
+  parts.push("Start cost " + t.cost + " shillings. Sales " + t.sales + " shillings. Profit " + t.profit + " shillings per batch.");
+  if (t.materials && t.materials.length) { parts.push("Materials needed:"); for (var m = 0; m < t.materials.length; m++) parts.push(t.materials[m].item + ", costing " + t.materials[m].cost + " shillings. Available from " + (t.materials[m].where || "local market") + "."); }
+  if (t.steps && t.steps.length) { parts.push("Steps:"); for (var s = 0; s < t.steps.length; s++) parts.push("Step " + (s + 1) + ". " + stripMD(t.steps[s])); }
+  if (t.dos && t.dos.length) { parts.push("Do's:"); for (var d = 0; d < t.dos.length; d++) parts.push(stripMD(t.dos[d]) + "."); }
+  if (t.donts && t.donts.length) { parts.push("Don'ts:"); for (var dn = 0; dn < t.donts.length; dn++) parts.push(stripMD(t.donts[dn]) + "."); }
+  if (t.market && t.market.length) { parts.push("Where to sell:"); for (var mk = 0; mk < t.market.length; mk++) parts.push(t.market[mk].channel + ". " + stripMD(t.market[mk].detail) + "."); }
+  if (t.startToday) parts.push("Start today. " + stripMD(t.startToday));
+  return parts.join(" ");
+}
+function toggleSpeak(id) {
+  var nid = Number(id);
+  if (currentlySpeakingId === nid) { stopSpeaking(); return; }
+  stopSpeaking();
+  if (!("speechSynthesis" in window)) { try { alert("Speech not supported on this device."); } catch (e) {} return; }
+  var t = null;
+  for (var i = 0; i < TUTORIALS.length; i++) if (TUTORIALS[i].id === nid) { t = TUTORIALS[i]; break; }
+  if (!t) return;
+  var text = buildSpeechText(t);
+  var words = text.split(/\s+/);
+  var chunks = [], cur = "";
+  for (var w = 0; w < words.length; w++) {
+    if ((cur + " " + words[w]).length > 200) { if (cur) chunks.push(cur.trim()); cur = words[w]; } else cur += " " + words[w];
+  }
+  if (cur.trim()) chunks.push(cur.trim());
+  var idx = 0;
+  function speakNext() {
+    if (idx >= chunks.length) { currentlySpeakingId = null; updateSpeakBtn(); return; }
+    var u = new SpeechSynthesisUtterance(chunks[idx]);
+    u.rate = 0.95; u.pitch = 1; u.volume = 1; u.lang = "en-US";
+    u.onend = function () { idx++; if (currentlySpeakingId === nid) speakNext(); };
+    u.onerror = function () { idx++; if (currentlySpeakingId === nid) speakNext(); };
+    window.speechSynthesis.speak(u);
+  }
+  currentlySpeakingId = nid; updateSpeakBtn(); speakNext();
+}
+function stopSpeaking() { currentlySpeakingId = null; try { if ("speechSynthesis" in window) window.speechSynthesis.cancel(); } catch (e) {} updateSpeakBtn(); }
+function updateSpeakBtn() { var b = byId("speakBtn"); if (!b) return; if (currentlySpeakingId) { b.classList.add("speaking"); b.textContent = "⏸️"; } else { b.classList.remove("speaking"); b.textContent = "🔊"; } }
+
+/* ============================================================
+   FAVOURITES & NOTES
+   ============================================================ */
+function isFav(id) { return favs.indexOf(Number(id)) > -1; }
+function toggleFav(id, ev) {
+  if (ev && ev.stopPropagation) ev.stopPropagation();
+  var nid = Number(id);
+  var idx = favs.indexOf(nid);
+  if (idx > -1) favs.splice(idx, 1); else favs.push(nid);
+  writeJSON(LS_FAV, favs);
+  renderTutorials();
+  var btn = document.querySelector('.fav[data-fav="' + nid + '"]');
+  if (btn) { btn.classList.add("pop"); setTimeout(function () { btn.classList.remove("pop"); }, 460); }
+}
+function saveHist(q, a) { hist.unshift({ q: String(q), a: String(a), t: Date.now() }); if (hist.length > 50) hist = hist.slice(0, 50); writeJSON(LS_HIST, hist); }
+function updateHistCount() { var el = byId("histPill"); if (el) el.textContent = "🧠 " + hist.length + " saved"; }
+function saveNote() {
+  var titleEl = byId("noteTitle"), bodyEl = byId("noteBody");
+  if (!titleEl || !bodyEl) return;
+  var title = titleEl.value.trim(), body = bodyEl.value.trim();
+  if (!title && !body) return;
+  notes.unshift({ id: Date.now(), title: title || "Untitled Note", body: body, t: Date.now() });
+  writeJSON(LS_NOTES, notes);
+  titleEl.value = ""; bodyEl.value = "";
+  renderNotes();
+}
+function deleteNote(id, ev) {
+  if (ev && ev.stopPropagation) ev.stopPropagation();
+  notes = notes.filter(function (n) { return n.id !== Number(id); });
+  writeJSON(LS_NOTES, notes);
+  renderNotes();
+}
+function openNoteModal(id) {
+  var found = null;
+  for (var i = 0; i < notes.length; i++) if (notes[i].id === Number(id)) { found = notes[i]; break; }
+  if (!found) return;
+  var modal = byId("noteModal");
+  byId("noteModalTitle").textContent = found.title;
+  byId("noteModalBody").innerHTML = '<span class="date">' + escapeHTML(formatDate(found.t)) + "</span>" + escapeHTML(found.body || "(empty)");
+  modal.classList.add("open");
+}
+function closeNoteModal() { var m = byId("noteModal"); if (m) m.classList.remove("open"); }
+function renderNotes() {
+  var list = byId("notesList");
+  if (!list) return;
+  if (!notes.length) list.innerHTML = '<div class="note-empty"><span class="bigicon">📝</span>No notes yet.<br>Write your first business idea above.</div>';
+  else {
+    var html = "";
+    for (var i = 0; i < notes.length; i++) {
+      var n = notes[i];
+      html += '<div class="note-item" onclick="openNoteModal(' + n.id + ')">' +
+        '<h4>' + escapeHTML(n.title) + '</h4>' +
+        '<div class="date">' + escapeHTML(formatDate(n.t)) + '</div>' +
+        '<p>' + escapeHTML(n.body || "(empty)") + '</p>' +
+        '<button class="note-delete" onclick="deleteNote(' + n.id + ', event)">Delete</button></div>';
+    }
+    list.innerHTML = html;
+  }
+  renderCreatorCard();
+}
+function renderCreatorCard() {
+  var slot = byId("creatorSlot");
+  if (!slot) return;
+  slot.innerHTML = '<div class="creator-card"><div class="creator-logo">AJON</div>' +
+    '<div class="creator-name">App made by Ajon Inno aka B.Innocent John</div>' +
+    '<a class="creator-tel" href="tel:+256768207738">📞 +256 768 207 738</a>' +
+    '<div class="creator-divider"></div>' +
+    '<div class="mission">Its Time To Devorce from Poverty Later might be Never</div>' +
+    '<div class="creator-copy">© 2025 Ajon • com.ajon.makemoney</div></div>';
+}
+
+/* ============================================================
+   HELPER (offline AI)
+   ============================================================ */
+function typingHTML() { return '<div class="card"><div class="typing"><span></span><span></span><span></span></div><div class="typing-label">Your Helper is thinking...</div></div>'; }
+function helperSearch(q) {
+  var query = String(q || "").toLowerCase().trim();
+  if (!query) return null;
+  var best = null, bestScore = 0;
+  for (var i = 0; i < TUTORIALS.length; i++) {
+    var t = TUTORIALS[i];
+    var hay = (t.t + " " + t.c + " " + (t.k || []).join(" ") + " " + (t.tagline || "") + " " + (t.imgKey || "")).toLowerCase();
+    var score = 0, words = query.split(/\s+/);
+    for (var w = 0; w < words.length; w++) if (words[w].length > 2 && hay.indexOf(words[w]) > -1) score += 3;
+    if (hay.indexOf(query) > -1) score += 5;
+    if (score > bestScore) { bestScore = score; best = t; }
+  }
+  return bestScore > 0 ? best : null;
+}
+function answerText(t) { return "I found this tutorial: " + t.t + ". Start cost UGX " + fmt(t.cost) + ", sales UGX " + fmt(t.sales) + ", profit UGX " + fmt(t.profit) + " per batch. Time: " + (t.time || "varies") + ". Materials from: " + (t.where || "local markets") + ". Open the full tutorial for all " + (t.steps ? t.steps.length : 0) + " steps."; }
+function noAnswerText() { return "I couldn't find that. Try: candy, soap, mushroom, chicken, juice, chapati, cooking oil."; }
+function answerCardHTML(t) {
+  var img = t.img || tutImg(t.imgKey, t.id * 7);
+  var fb = svgFallback(t.emoji, t.t);
+  return '<div class="card"><div class="imgwrap">' + imgTag(img, fb, t.t) +
+    '<span class="badge">' + (t.emoji || "💰") + ' UGX ' + fmt(t.profit) + ' profit</span></div>' +
+    '<h3 class="card-title">' + escapeHTML(t.t) + '</h3>' +
+    '<span class="chip">' + escapeHTML(catName(t.c)) + '</span>' +
+    '<p class="typed"></p>' +
+    '<div class="profit">💰 Cost UGX ' + fmt(t.cost) + ' → Profit UGX ' + fmt(t.profit) + '</div>' +
+    '<div class="memcount">🧠 Memory: ' + hist.length + ' saved</div>' +
+    '<button class="btn" onclick="openTutorial(' + t.id + ')" style="margin-top:10px;">Open Full Tutorial</button></div>';
+}
+function noAnswerHTML() { return '<div class="card"><h3 class="card-title">🤔 No exact match</h3><p class="typed"></p><div class="note">Try: candy, soap, mushroom, chicken, juice, cooking oil.</div><div class="memcount">🧠 Memory: ' + hist.length + ' saved</div></div>'; }
+function askAI() {
+  var input = byId("aiInput"), aires = byId("aires");
+  if (!input || !aires) return;
+  var q = input.value.trim();
+  if (!q) { input.focus(); return; }
+  var my = ++askToken;
+  aires.innerHTML = typingHTML();
+  setTimeout(function () {
+    if (my !== askToken) return;
+    var t = helperSearch(q);
+    saveHist(q, t ? t.t : "No match");
+    updateHistCount();
+    aires.innerHTML = t ? answerCardHTML(t) : noAnswerHTML();
+    var typedEl = aires.querySelector(".typed");
+    var fullText = t ? answerText(t) : noAnswerText();
+    typeWriter(fullText, typedEl, 20, function () { var m = aires.querySelector(".memcount"); if (m) m.textContent = "🧠 Memory: " + hist.length + " saved"; });
+  }, 800);
+}
+function typeWriter(text, el, speed, done) {
+  if (!el) { if (done) done(); return; }
+  var full = String(text || ""), i = 0, finished = false;
+  el.textContent = ""; el.classList.add("cursor");
+  function finish() { if (finished) return; finished = true; el.textContent = full; el.classList.remove("cursor"); if (done) done(); }
+  el.addEventListener("click", finish, { once: true });
+  function tick() { if (finished) return; if (i >= full.length) { finish(); return; } el.textContent += full.charAt(i); i++; setTimeout(tick, speed); }
+  tick();
+}
+
+/* ============================================================
+   PAYMENT / UNLOCK TAB
+   ============================================================ */
+function renderPayment() {
+  var area = byId("videoArea");
+  if (!area) return;
+
+  if (!isDateValid()) {
+    area.innerHTML = '<div class="paywall-wrap"><div class="paywall-card">' +
+      '<div class="paywall-lock">⏰</div>' +
+      '<div class="paywall-title">Set Correct Date</div>' +
+      '<p class="paywall-sub">Please set automatic date and time in phone settings to use Ajon.</p>' +
+      '<div class="paywall-instructions">' +
+      '<div class="line"><span class="ic">→</span><div>Open <strong>Settings</strong> on your phone.</div></div>' +
+      '<div class="line"><span class="ic">→</span><div>Go to <strong>System → Date &amp; Time</strong>.</div></div>' +
+      '<div class="line"><span class="ic">→</span><div>Turn on <strong>Set automatically</strong>.</div></div>' +
+      '<div class="line"><span class="ic">→</span><div>Reopen the app.</div></div></div></div></div>';
+    return;
+  }
+
+  if (isSubscribed()) {
+    var daysLeft = Math.ceil((subscriptionEndDate - Date.now()) / (1000 * 60 * 60 * 24));
+    var hoursLeft = Math.ceil((subscriptionEndDate - Date.now()) / (1000 * 60 * 60));
+    var human = daysLeft >= 1 ? daysLeft + " days" : hoursLeft + " hours";
+    area.innerHTML = '<div class="paywall-wrap"><div class="paywall-active-card">' +
+      '<h3>✅ Unlocked</h3>' +
+      '<div class="num">' + human + '</div><div class="lbl">REMAINING</div>' +
+      '<div class="exp">Access valid until <strong>' + escapeHTML(formatDateShort(subscriptionEndDate)) + '</strong></div>' +
+      '<div class="paywall-divider"></div>' +
+      '<div class="paywall-perks">' +
+      '<div class="pr"><span class="tick">✓</span>All 1500+ tutorials and ideas</div>' +
+      '<div class="pr"><span class="tick">✓</span>Offline Helper for instant answers</div>' +
+      '<div class="pr"><span class="tick">✓</span>Seven specialist Assistants</div>' +
+      '<div class="pr"><span class="tick">✓</span>Text-to-speech on every tutorial</div>' +
+      '<div class="pr"><span class="tick">✓</span>Notes, favourites and sync</div></div>' +
+      '<div class="paywall-divider"></div>' +
+      '<div style="font-size:12px;color:#8f8f8f;line-height:1.6;">After 30 days the app locks and you will need the next hour\'s password. Renew anytime by paying again.</div></div>' +
+      '<div class="ad-card" onclick="openAdvertModal()" style="max-width:440px;margin:14px auto 0;width:100%;">' +
+      '<span class="ad-ribbon">SPONSOR</span><div class="ad-emoji">📢</div>' +
+      '<div class="ad-body"><div class="ad-title">Advertise Your Business Here</div>' +
+      '<div class="ad-text">Reach <strong>208,000+</strong> Ugandan business owners for just <strong>' + fmt(ADVERT_INFO.price) + ' ' + ADVERT_INFO.currency + ' per week</strong>.</div>' +
+      '<span class="ad-cta">👉 Tap to Advertise</span></div></div></div>';
+    return;
+  }
+
+  var trialLeft = trialMinutesLeft();
+  var trialMsg = trialLeft > 0
+    ? '<div class="paywall-instructions" style="background:linear-gradient(135deg,#001a0a,#003d14);border-color:rgba(0,200,83,.55);">' +
+      '<div style="text-align:center;font-size:13px;color:#00c853;font-weight:800;">🎁 Free preview: ' + formatTrialTime(trialLeft) + ' left</div>' +
+      '<div style="text-align:center;font-size:11.5px;color:#c8c8c8;margin-top:4px;">Enjoy all tutorials until the timer ends</div></div>'
+    : '';
+
+  var expiryTime = currentHourEndsAt();
+  var expiryText = new Date(expiryTime).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+
+  area.innerHTML = '<div class="paywall-wrap">' + trialMsg +
+    '<div class="paywall-card">' +
+    '<div class="paywall-lock">🔓</div>' +
+    '<div class="paywall-title">Unlock All 1500 Ideas</div>' +
+    '<div class="paywall-sub">30 days access • password refreshes hourly</div>' +
+    '<div class="paywall-instructions">' +
+    '<div class="line"><span class="ic">1.</span><div>Pay <strong>' + fmt(PAYMENT_INFO.amount) + ' ' + escapeHTML(PAYMENT_INFO.currency) + '</strong> to MTN <span class="num">' + escapeHTML(PAYMENT_INFO.phone) + '</span> Name <strong>' + escapeHTML(PAYMENT_INFO.name) + '</strong>.</div></div>' +
+    '<div class="line"><span class="ic">2.</span><div>After payment, <strong>beep or call</strong> <span class="num">' + escapeHTML(PAYMENT_INFO.phone) + '</span> with your receipt to get the current hour password.</div></div>' +
+    '<div class="line"><span class="ic">3.</span><div>Type the password below and tap <strong>Verify and Unlock</strong>. You get 30 full days of access.</div></div>' +
+    '</div>' +
+    '<div class="paywall-hint">⚠️ Password changes every hour. Current one expires at <strong style="color:#00c853;">' + escapeHTML(expiryText) + '</strong> sharp. Ask for it right after paying.</div>' +
+    '<div class="paywall-input-row"><input id="txInput" type="text" placeholder="Enter hourly password" autocomplete="off" autocapitalize="off" spellcheck="false"></div>' +
+    '<button id="verifyBtn" onclick="verifyPassword()">Verify and Unlock 30 Days</button>' +
+    '<div id="statusMsg"></div>' +
+    '<div class="paywall-faq"><strong>HOW IT WORKS</strong>' +
+    'Each password is valid for one hour only — the one shown at the moment you paid. Once you verify it, the app unlocks for 30 full days. After 30 days the app locks again and you get a new password from the current hour to renew.</div>' +
+    '</div>' +
+    '<div class="ad-card" onclick="openAdvertModal()" style="max-width:440px;margin:0 auto;width:100%;">' +
+    '<span class="ad-ribbon">SPONSOR</span><div class="ad-emoji">📢</div>' +
+    '<div class="ad-body"><div class="ad-title">Advertise Your Business Here</div>' +
+    '<div class="ad-text">Reach <strong>208,000+</strong> Ugandan business owners for just <strong>' + fmt(ADVERT_INFO.price) + ' ' + ADVERT_INFO.currency + ' per week</strong>.</div>' +
+    '<span class="ad-cta">👉 Tap to Advertise</span></div></div>' +
+    '<div class="paywall-card" style="margin-top:14px;">' +
+    '<div class="paywall-title" style="font-size:16px;">📚 What You Get</div>' +
+    '<div class="paywall-perks" style="margin-top:10px;">' +
+    '<div class="pr"><span class="tick">✓</span>1500+ business ideas and tutorials with photos</div>' +
+    '<div class="pr"><span class="tick">✓</span>Offline Helper for instant answers</div>' +
+    '<div class="pr"><span class="tick">✓</span>Seven specialist Assistants</div>' +
+    '<div class="pr"><span class="tick">✓</span>Text-to-speech reads every tutorial aloud</div>' +
+    '<div class="pr"><span class="tick">✓</span>Notes, favourites and auto-sync when online</div></div></div></div>';
+}
+
+function verifyPassword() {
+  var input = byId("txInput");
+  var status = byId("statusMsg");
+  if (!input || !status) return;
+
+  var entered = String(input.value || "").trim().toLowerCase();
+
+  if (!isDateValid()) {
+    status.className = "err";
+    status.textContent = "Please set automatic date and time in phone settings to use Ajon.";
+    return;
+  }
+
+  var expected = generateCurrentPassword();
+  if (!expected) {
+    status.className = "err";
+    status.textContent = "Please set automatic date and time in phone settings to use Ajon.";
+    return;
+  }
+
+  try { console.log("[Ajon owner] Current hour password:", expected, "| Expires at top of hour"); } catch (e) {}
+
+  if (entered.length < 7) { status.className = "err"; status.textContent = "Invalid password"; return; }
+
+  if (entered !== expected) {
+    status.className = "err";
+    status.textContent = "Wrong password for this hour. Password changes every hour — ask for the current one.";
+    return;
+  }
+
+  for (var i = 0; i < usedPasswords.length; i++) {
+    if (String(usedPasswords[i]).toLowerCase() === entered) {
+      status.className = "err";
+      status.textContent = "This password was already used on this phone.";
+      return;
+    }
+  }
+
+  usedPasswords.push(entered);
+  if (usedPasswords.length > 500) usedPasswords = usedPasswords.slice(-500);
+  writeJSON(LS_USED_PW, usedPasswords);
+
+  var days = appConfig.subscriptionDays || 30;
+  subscriptionEndDate = Date.now() + (days * 24 * 60 * 60 * 1000);
+  writeJSON(LS_SUB_END, subscriptionEndDate);
+
+  status.className = "ok";
+  status.textContent = "Success! Unlocked " + days + " days until " + formatDateShort(subscriptionEndDate) + ".";
+
+  try { updateTrialBar(); } catch (e) {}
+  try { renderTutorials(true); } catch (e) {}
+
+  setTimeout(function () {
+    try { alert("Welcome to Ajon! You now have 30 days of full access."); } catch (e) {}
+    renderPayment();
+  }, 2000);
+}
+
+/* ============================================================
+   ASSISTANTS CHAT
+   ============================================================ */
+var ASSISTANTS = {
+  general: { name: "General Assistant", icon: "🧠", desc: "Ask anything about making money.", intro: "Hello! I am your General Assistant. Ask me about candy, soap, mushrooms, chicken, cooking oil, or any business idea." },
+  food:    { name: "Food & Drinks Assist", icon: "🍲", desc: "Candy, chapati, juice, yogurt and more.", intro: "Welcome to Food & Drinks Assist! I help with candy, chapati, mandazi, juice, and all food businesses." },
+  home:    { name: "Home Products Assist", icon: "🧼", desc: "Soap, detergent, bleach and more.", intro: "Welcome to Home Products Assist! I help with liquid soap, bar soap, detergent, bleach." },
+  cosm:    { name: "Cosmetics Assist", icon: "🧴", desc: "Smearing oil, shea butter, lip balm.", intro: "Welcome to Cosmetics Assist! I help with smearing oil, shea butter, hair oil, lip balm." },
+  agri:    { name: "Agriculture Assist", icon: "🌾", desc: "Crickets, mushrooms, chickens, rabbits.", intro: "Welcome to Agriculture Assist! I help with crickets, grasshoppers, mushrooms, chickens, rabbits, quails." },
+  craft:   { name: "Crafts Assist", icon: "🎨", desc: "Beads, paper bags, crafts.", intro: "Welcome to Crafts Assist! I help with beaded jewelry, paper bags, and all crafts." },
+  oil:     { name: "Cooking Oils Assist", icon: "🛢️", desc: "Groundnut, avocado, sunflower oil.", intro: "Welcome to Cooking Oils Assist! I help with groundnut oil, avocado oil, sunflower oil, and all cooking oil businesses." }
+};
+function renderAssistants() {
+  var box = byId("chatMsgs");
+  if (!box) return;
+  var html = "";
+  html += '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:12px 16px;">';
+  var keys = Object.keys(ASSISTANTS);
+  for (var i = 0; i < keys.length; i++) {
+    var a = ASSISTANTS[keys[i]];
+    var active = (keys[i] === currentAssistant) ? ' style="border-left-color:#00c853;background:#003d14;"' : '';
+    html += '<div style="background:#1a1a1a;border-left:4px solid #00c853;border-radius:12px;padding:12px;cursor:pointer;" onclick="switchAssistant(\'' + keys[i] + '\')"' + active + '>' +
+      '<span style="font-size:24px;display:block;margin-bottom:4px;">' + a.icon + '</span>' +
+      '<div style="font-size:12.5px;font-weight:800;color:#fff;margin-bottom:2px;">' + escapeHTML(a.name) + '</div>' +
+      '<div style="font-size:11px;color:#8f8f8f;line-height:1.3;">' + escapeHTML(a.desc) + '</div></div>';
+  }
+  html += '</div>';
+  var msgs = chatMsgs.filter(function (m) { return m.assistant === currentAssistant; });
+  if (!msgs.length) html += '<div class="bubble other">' + escapeHTML(ASSISTANTS[currentAssistant].intro) + '</div>';
+  else for (var j = 0; j < msgs.length; j++) {
+    var m = msgs[j];
+    html += '<div class="bubble ' + (m.me ? "me" : "other") + '">' + escapeHTML(m.text) + '</div>';
+  }
+  box.innerHTML = html;
+  box.scrollTop = box.scrollHeight;
+  var input = byId("chatInput");
+  if (input) input.placeholder = "Ask " + ASSISTANTS[currentAssistant].name + "...";
+}
+function switchAssistant(key) { currentAssistant = key; renderAssistants(); }
+function assistantReply(text) {
+  var t = helperSearch(text);
+  var cur = ASSISTANTS[currentAssistant];
+  if (t) return cur.name + ": I found " + t.t + ". Start cost UGX " + fmt(t.cost) + ", profit UGX " + fmt(t.profit) + " per batch. " + (t.where ? "Materials from: " + t.where + ". " : "") + "Open the Tutorials tab for the full steps.";
+  for (var i = 0; i < TUTORIALS.length; i++) if (TUTORIALS[i].c === currentAssistant) return cur.name + ": " + cur.intro + " Try asking about " + TUTORIALS[i].t + ".";
+  return cur.name + ": " + cur.intro;
+}
+function sendChat() {
+  var input = byId("chatInput");
+  if (!input) return;
+  var v = input.value.trim();
+  if (!v) return;
+  chatMsgs.push({ me: true, text: v, assistant: currentAssistant });
+  input.value = "";
+  renderAssistants();
+  setTimeout(function () { chatMsgs.push({ me: false, text: assistantReply(v), assistant: currentAssistant }); renderAssistants(); }, 600);
+}
+
+/* ============================================================
+   NETWORK
+   ============================================================ */
+function updateNet() {
+  var online = navigator.onLine;
+  var dot = byId("netDot"); if (dot) dot.classList.toggle("on", online);
+  var st = byId("aiStatus");
+  if (st) st.textContent = online ? "🟢 Online — syncing" : "🔴 Offline — works fully";
+}
+function syncFromServer() { /* Replace with real Appwrite fetch when ready */ }
+
+/* ============================================================
+   TABS
+   ============================================================ */
+function showTab(name) {
+  if (name !== "tutorials") stopSpeaking();
+  currentTab = name;
+  var panels = document.querySelectorAll(".panel");
+  for (var i = 0; i < panels.length; i++) panels[i].classList.toggle("active", panels[i].id === "panel-" + name);
+  var btns = document.querySelectorAll(".tab-btn");
+  for (var j = 0; j < btns.length; j++) btns[j].classList.toggle("active", btns[j].getAttribute("data-tab") === name);
+  var main = byId("main"); if (main) main.scrollTop = 0;
+  if (name === "tutorials") searchT(currentQuery);
+  if (name === "video") renderPayment();
+  if (name === "chat") renderAssistants();
+  if (name === "notes") renderNotes();
+  if (name === "ai") { updateNet(); var inp = byId("aiInput"); if (inp) setTimeout(function () { try { inp.focus(); } catch (e) {} }, 50); }
+}
+function renderCatBar() {
+  var bar = byId("catBar");
+  if (!bar) return;
+  var html = '<div class="cat-chip active" data-cat="all" onclick="filterCat(\'all\')">All</div>';
+  for (var i = 0; i < CATEGORIES.length; i++) html += '<div class="cat-chip" data-cat="' + CATEGORIES[i].id + '" onclick="filterCat(\'' + CATEGORIES[i].id + '\')">' + CATEGORIES[i].name + '</div>';
+  bar.innerHTML = html;
+}
+
+/* ============================================================
+   SPLASH
+   ============================================================ */
+function hideSplash() {
+  var splash = byId("splashScreen");
+  if (!splash) return;
+  splash.classList.add("hide");
+  setTimeout(function () { try { if (splash.parentNode) splash.parentNode.removeChild(splash); } catch (e) {} }, 700);
+}
+
+/* ============================================================
+   BOOT
+   ============================================================ */
+function boot() {
+  try {
+    TUTORIALS = buildTutorials();
+    renderCatBar();
+
+    var searchInput = byId("searchInput");
+    if (searchInput) {
+      searchInput.addEventListener("input", function (e) {
+        var v = e.target.value;
+        if (searchTimer) clearTimeout(searchTimer);
+        searchTimer = setTimeout(function () { searchT(v); }, 200);
+      });
+    }
+    searchT("");
+
+    var aiInput = byId("aiInput");
+    if (aiInput) aiInput.addEventListener("keydown", function (e) { if (e.key === "Enter") { e.preventDefault(); askAI(); } });
+
+    var chatInput = byId("chatInput");
+    if (chatInput) chatInput.addEventListener("keydown", function (e) { if (e.key === "Enter") { e.preventDefault(); sendChat(); } });
+
+    window.addEventListener("online", updateNet);
+    window.addEventListener("offline", updateNet);
+
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape") { closeDetail(); closeNoteModal(); stopSpeaking(); closeAdvertModal(); }
+    });
+    document.addEventListener("visibilitychange", function () { if (document.hidden) stopSpeaking(); });
+
+    try {
+      var dbg = generateCurrentPassword();
+      if (dbg) {
+        var endTime = new Date(currentHourEndsAt()).toLocaleTimeString();
+        console.log("[Ajon owner] Current hour password:", dbg, "| Valid until:", endTime);
+      } else {
+        console.log("[Ajon owner] Date is before 2026 — password not generated.");
+      }
+    } catch (e) {}
+
+    animateUserCount();
+
+    updateHistCount();
+    updateNet();
+    renderNotes();
+    renderAssistants();
+    renderPayment();
+    updateTrialBar();
+    startTrialTick();
+
+    setTimeout(hideSplash, 2400);
+  } catch (e) {
+    try { console.log("Ajon boot:", e && e.message); } catch (x) {}
+    hideSplash();
+  }
+}
+
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", boot);
+} else {
+  boot();
+}
+</script>
+</body>
+</html>
