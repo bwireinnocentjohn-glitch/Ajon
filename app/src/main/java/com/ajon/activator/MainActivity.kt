@@ -14,7 +14,9 @@ import android.os.Handler
 import android.os.Looper
 import android.provider.Settings
 import android.view.Gravity
+import android.view.View
 import android.widget.Button
+import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
@@ -22,6 +24,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.google.android.material.button.MaterialButtonToggleGroup
 import java.util.Calendar
 import java.util.Locale
 
@@ -34,8 +37,20 @@ class MainActivity : AppCompatActivity() {
     private lateinit var btnCopyCurrent: Button
     private lateinit var llPasswordList: LinearLayout
     private lateinit var llTransactionLog: LinearLayout
+    private lateinit var tvTotalMoney: TextView
+    private lateinit var etAdminPin: EditText
+    private lateinit var btnUnlockAdmin: Button
+    private lateinit var tvAdminStatus: TextView
+    private lateinit var toggleGroup: MaterialButtonToggleGroup
+    
+    private lateinit var llHomeContent: LinearLayout
+    private lateinit var llScheduleContent: LinearLayout
+    private lateinit var llLogsContent: LinearLayout
+    private lateinit var llAdminContent: LinearLayout
+
     private val handler = Handler(Looper.getMainLooper())
     private var isRunning = false
+    private var isAdminUnlocked = false
 
     private val permissionCode = 100
     private val requiredPermissions = arrayOf(
@@ -49,6 +64,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        // Bind Views
         tvCurrentPassword = findViewById(R.id.tvCurrentPassword)
         tvCountdown = findViewById(R.id.tvCountdown)
         tvPastPassword = findViewById(R.id.tvPastPassword)
@@ -56,11 +72,56 @@ class MainActivity : AppCompatActivity() {
         btnCopyCurrent = findViewById(R.id.btnCopyCurrent)
         llPasswordList = findViewById(R.id.llPasswordList)
         llTransactionLog = findViewById(R.id.llTransactionLog)
+        tvTotalMoney = findViewById(R.id.tvTotalMoney)
+        etAdminPin = findViewById(R.id.etAdminPin)
+        btnUnlockAdmin = findViewById(R.id.btnUnlockAdmin)
+        tvAdminStatus = findViewById(R.id.tvAdminStatus)
+        toggleGroup = findViewById(R.id.toggleGroup)
+        
+        llHomeContent = findViewById(R.id.llHomeContent)
+        llScheduleContent = findViewById(R.id.llScheduleContent)
+        llLogsContent = findViewById(R.id.llLogsContent)
+        llAdminContent = findViewById(R.id.llAdminContent)
+
+        // Load Admin State
+        val prefs = getSharedPreferences("AjonSettings", Context.MODE_PRIVATE)
+        isAdminUnlocked = prefs.getBoolean("isAdmin", false)
+        updateAdminUI()
+
+        // Tab Switching Logic
+        toggleGroup.addOnButtonCheckedListener { _, checkedId, isChecked ->
+            if (isChecked) {
+                when (checkedId) {
+                    R.id.btnTabHome -> showTab(0)
+                    R.id.btnTabSchedule -> showTab(1)
+                    R.id.btnTabLogs -> showTab(2)
+                    R.id.btnTabAdmin -> showTab(3)
+                }
+            }
+        }
+        // Default to Home Tab
+        toggleGroup.check(R.id.btnTabHome)
 
         btnCopyCurrent.setOnClickListener {
+            if (!isAdminUnlocked) {
+                Toast.makeText(this, "Please unlock Admin first", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
             val pass = tvCurrentPassword.text.toString()
-            if (pass != "--------") {
+            if (pass != "LOCKED" && pass != "--------") {
                 copyToClipboard(pass)
+            }
+        }
+
+        btnUnlockAdmin.setOnClickListener {
+            val pin = etAdminPin.text.toString()
+            if (pin == "26bijon") {
+                isAdminUnlocked = true
+                prefs.edit().putBoolean("isAdmin", true).apply()
+                updateAdminUI()
+                Toast.makeText(this, "Admin Unlocked!", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(this, "Wrong PIN", Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -69,6 +130,37 @@ class MainActivity : AppCompatActivity() {
                 requestAllPermissions()
             }
         }
+    }
+
+    private fun updateAdminUI() {
+        if (isAdminUnlocked) {
+            tvCurrentPassword.text = "--------"
+            tvCurrentPassword.setTextColor(Color.parseColor("#00FF00"))
+            tvPastPassword.visibility = View.VISIBLE
+            btnCopyCurrent.visibility = View.VISIBLE
+            tvAdminStatus.text = "Status: UNLOCKED"
+            tvAdminStatus.setTextColor(Color.parseColor("#00FF00"))
+            etAdminPin.visibility = View.GONE
+            btnUnlockAdmin.visibility = View.GONE
+            if (isRunning) updatePasswordLoop()
+        } else {
+            tvCurrentPassword.text = "LOCKED"
+            tvCurrentPassword.setTextColor(Color.parseColor("#FF4444"))
+            tvPastPassword.visibility = View.GONE
+            btnCopyCurrent.visibility = View.GONE
+            tvAdminStatus.text = "Status: Locked"
+            tvAdminStatus.setTextColor(Color.parseColor("#FF4444"))
+            etAdminPin.visibility = View.VISIBLE
+            btnUnlockAdmin.visibility = View.VISIBLE
+            handler.removeCallbacks(passwordUpdater)
+        }
+    }
+
+    private fun showTab(index: Int) {
+        llHomeContent.visibility = if (index == 0) View.VISIBLE else View.GONE
+        llScheduleContent.visibility = if (index == 1) View.VISIBLE else View.GONE
+        llLogsContent.visibility = if (index == 2) View.VISIBLE else View.GONE
+        llAdminContent.visibility = if (index == 3) View.VISIBLE else View.GONE
     }
 
     private fun copyToClipboard(text: String) {
@@ -106,7 +198,8 @@ class MainActivity : AppCompatActivity() {
 
     private fun startActivator() {
         isRunning = true
-        btnStart.text = "Ajon Activator is Running"
+        btnStart.text = "Ajon Activator is Running 24/7"
+        btnStart.isEnabled = false
 
         val serviceIntent = Intent(this, KeepAliveService::class.java)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -116,7 +209,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         askBatteryOptimization()
-        updatePasswordLoop()
+        if (isAdminUnlocked) updatePasswordLoop()
     }
 
     private fun askBatteryOptimization() {
@@ -134,6 +227,8 @@ class MainActivity : AppCompatActivity() {
 
     private val passwordUpdater = object : Runnable {
         override fun run() {
+            if (!isAdminUnlocked) return
+
             val now = Calendar.getInstance()
             val year = now.get(Calendar.YEAR)
             val month = now.get(Calendar.MONTH)
@@ -153,6 +248,7 @@ class MainActivity : AppCompatActivity() {
             )
             tvPastPassword.text = "Previous: $pastPass"
 
+            // Countdown in 12h format
             val minutesLeft = 59 - now.get(Calendar.MINUTE)
             val secondsLeft = 60 - now.get(Calendar.SECOND)
             tvCountdown.text = String.format(Locale.getDefault(), "%02d:%02d left this hour", minutesLeft, secondsLeft)
@@ -162,6 +258,13 @@ class MainActivity : AppCompatActivity() {
 
             handler.postDelayed(this, 1000)
         }
+    }
+
+    private fun format12Hour(cal: Calendar): String {
+        val amPm = if (cal.get(Calendar.AM_PM) == Calendar.AM) "AM" else "PM"
+        val hour12 = cal.get(Calendar.HOUR)
+        val displayHour = if (hour12 == 0) 12 else hour12
+        return String.format(Locale.getDefault(), "%02d:00 %s", displayHour, amPm)
     }
 
     private fun populateSchedule(now: Calendar) {
@@ -178,7 +281,7 @@ class MainActivity : AppCompatActivity() {
                 cal.get(Calendar.DAY_OF_MONTH),
                 cal.get(Calendar.HOUR_OF_DAY)
             )
-            val timeStr = String.format(Locale.getDefault(), "%02d:00", cal.get(Calendar.HOUR_OF_DAY))
+            val timeStr = format12Hour(cal)
 
             val row = LinearLayout(this)
             row.orientation = LinearLayout.HORIZONTAL
@@ -188,7 +291,7 @@ class MainActivity : AppCompatActivity() {
             val tvTime = TextView(this)
             tvTime.text = timeStr
             tvTime.setTextColor(Color.WHITE)
-            tvTime.width = 120
+            tvTime.width = 200
             tvTime.textSize = 16f
             row.addView(tvTime)
 
@@ -207,9 +310,7 @@ class MainActivity : AppCompatActivity() {
 
             val btnCopy = Button(this)
             btnCopy.text = "Copy"
-            btnCopy.setOnClickListener {
-                copyToClipboard(pass)
-            }
+            btnCopy.setOnClickListener { copyToClipboard(pass) }
             row.addView(btnCopy)
 
             llPasswordList.addView(row)
@@ -222,6 +323,7 @@ class MainActivity : AppCompatActivity() {
         val historyText = prefs.getString("log", "") ?: ""
 
         if (historyText.isEmpty()) {
+            tvTotalMoney.text = "Total Received: UGX 0"
             val tvEmpty = TextView(this)
             tvEmpty.text = "No transactions yet."
             tvEmpty.setTextColor(Color.GRAY)
@@ -232,13 +334,16 @@ class MainActivity : AppCompatActivity() {
         }
 
         val entries = historyText.lines().filter { it.isNotBlank() }
+        var total = 0
+        
         for (entry in entries) {
             val parts = entry.split("|")
             if (parts.size == 4) {
                 val phone = parts[0]
-                val amount = parts[1]
+                val amount = parts[1].toIntOrNull() ?: 0
                 val password = parts[2]
                 val time = parts[3]
+                total += amount
 
                 val row = LinearLayout(this)
                 row.orientation = LinearLayout.VERTICAL
@@ -259,9 +364,11 @@ class MainActivity : AppCompatActivity() {
                 llTransactionLog.addView(row)
             }
         }
+        tvTotalMoney.text = "Total Received: UGX $total"
     }
 
     private fun updatePasswordLoop() {
+        handler.removeCallbacks(passwordUpdater)
         handler.post(passwordUpdater)
     }
 
