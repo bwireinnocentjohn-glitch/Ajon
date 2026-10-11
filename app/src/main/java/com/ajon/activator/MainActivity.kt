@@ -1,16 +1,23 @@
 package com.ajon.activator
 
 import android.Manifest
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Color
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.provider.Settings
+import android.view.Gravity
 import android.widget.Button
+import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -24,6 +31,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var tvCountdown: TextView
     private lateinit var tvPastPassword: TextView
     private lateinit var btnStart: Button
+    private lateinit var btnCopyCurrent: Button
+    private lateinit var llPasswordList: LinearLayout
     private val handler = Handler(Looper.getMainLooper())
     private var isRunning = false
 
@@ -43,12 +52,28 @@ class MainActivity : AppCompatActivity() {
         tvCountdown = findViewById(R.id.tvCountdown)
         tvPastPassword = findViewById(R.id.tvPastPassword)
         btnStart = findViewById(R.id.btnStart)
+        btnCopyCurrent = findViewById(R.id.btnCopyCurrent)
+        llPasswordList = findViewById(R.id.llPasswordList)
+
+        btnCopyCurrent.setOnClickListener {
+            val pass = tvCurrentPassword.text.toString()
+            if (pass != "--------") {
+                copyToClipboard(pass)
+            }
+        }
 
         btnStart.setOnClickListener {
             if (!isRunning) {
                 requestAllPermissions()
             }
         }
+    }
+
+    private fun copyToClipboard(text: String) {
+        val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+        val clip = ClipData.newPlainText("Ajon Password", text)
+        clipboard.setPrimaryClip(clip)
+        Toast.makeText(this, "Copied $text", Toast.LENGTH_SHORT).show()
     }
 
     private fun requestAllPermissions() {
@@ -81,7 +106,6 @@ class MainActivity : AppCompatActivity() {
         isRunning = true
         btnStart.text = "Ajon Activator is Running"
 
-        // Start foreground service
         val serviceIntent = Intent(this, KeepAliveService::class.java)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             startForegroundService(serviceIntent)
@@ -89,10 +113,7 @@ class MainActivity : AppCompatActivity() {
             startService(serviceIntent)
         }
 
-        // Ask to ignore battery optimization
         askBatteryOptimization()
-
-        // Start updating password display
         updatePasswordLoop()
     }
 
@@ -104,7 +125,7 @@ class MainActivity : AppCompatActivity() {
             try {
                 startActivity(intent)
             } catch (e: Exception) {
-                // Some phones don't support this, just ignore
+                // Ignore if not supported
             }
         }
     }
@@ -122,21 +143,14 @@ class MainActivity : AppCompatActivity() {
             tvCurrentPassword.text = currentPass
 
             // Past hour password
-            val pastHour = if (hour == 0) 23 else hour - 1
-            val pastDay = if (hour == 0) {
-                if (day == 1) {
-                    // Previous month
-                    val cal = Calendar.getInstance()
-                    cal.add(Calendar.DAY_OF_MONTH, -1)
-                    cal.get(Calendar.DAY_OF_MONTH)
-                } else day - 1
-            } else day
-            val pastMonth = if (hour == 0 && day == 1) {
-                val cal = Calendar.getInstance()
-                cal.add(Calendar.MONTH, -1)
-                cal.get(Calendar.MONTH)
-            } else month
-            val pastPass = makePassword(year, pastMonth, pastDay, pastHour)
+            val pastCal = Calendar.getInstance()
+            pastCal.add(Calendar.HOUR_OF_DAY, -1)
+            val pastPass = makePassword(
+                pastCal.get(Calendar.YEAR),
+                pastCal.get(Calendar.MONTH),
+                pastCal.get(Calendar.DAY_OF_MONTH),
+                pastCal.get(Calendar.HOUR_OF_DAY)
+            )
             tvPastPassword.text = "Previous: $pastPass"
 
             // Countdown
@@ -144,7 +158,63 @@ class MainActivity : AppCompatActivity() {
             val secondsLeft = 60 - now.get(Calendar.SECOND)
             tvCountdown.text = String.format(Locale.getDefault(), "%02d:%02d left this hour", minutesLeft, secondsLeft)
 
+            // Update the list
+            populateSchedule(now)
+
             handler.postDelayed(this, 1000)
+        }
+    }
+
+    private fun populateSchedule(now: Calendar) {
+        llPasswordList.removeAllViews()
+
+        // Show -2 hours to +5 hours
+        for (i in -2..5) {
+            val cal = Calendar.getInstance()
+            cal.time = now.time
+            cal.add(Calendar.HOUR_OF_DAY, i)
+
+            val pass = makePassword(
+                cal.get(Calendar.YEAR),
+                cal.get(Calendar.MONTH),
+                cal.get(Calendar.DAY_OF_MONTH),
+                cal.get(Calendar.HOUR_OF_DAY)
+            )
+            val timeStr = String.format(Locale.getDefault(), "%02d:00", cal.get(Calendar.HOUR_OF_DAY))
+
+            val row = LinearLayout(this)
+            row.orientation = LinearLayout.HORIZONTAL
+            row.setPadding(0, 24, 0, 24)
+            row.gravity = Gravity.CENTER_VERTICAL
+
+            val tvTime = TextView(this)
+            tvTime.text = timeStr
+            tvTime.setTextColor(Color.WHITE)
+            tvTime.width = 120
+            tvTime.textSize = 16f
+            row.addView(tvTime)
+
+            val tvPass = TextView(this)
+            tvPass.text = pass
+            tvPass.textSize = 18f
+            tvPass.width = 400
+            if (i < 0) {
+                tvPass.setTextColor(Color.parseColor("#FF4444")) // Red for past
+            } else if (i == 0) {
+                tvPass.setTextColor(Color.parseColor("#00FF00")) // Green for now
+            } else {
+                tvPass.setTextColor(Color.parseColor("#00CCFF")) // Cyan for next
+            }
+            row.addView(tvPass)
+
+            val btnCopy = Button(this)
+            btnCopy.text = "Copy"
+            btnCopy.setOnClickListener {
+                copyToClipboard(pass)
+            }
+            row.addView(btnCopy)
+
+            llPasswordList.addView(row)
         }
     }
 
