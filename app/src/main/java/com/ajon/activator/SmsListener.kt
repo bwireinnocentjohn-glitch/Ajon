@@ -3,8 +3,10 @@ package com.ajon.activator
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.telephony.SmsManager
 import android.telephony.SmsMessage
+import android.telephony.SubscriptionManager
 import android.util.Log
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -19,22 +21,25 @@ class SmsListener : BroadcastReceiver() {
         val bundle = intent.extras ?: return
         val pdus = bundle.get("pdus") as? Array<*> ?: return
         val format = bundle.getString("format")
+        
+        // Get the SIM card that received this SMS
+        val subId = intent.extras?.getInt("subscription", -1) ?: -1
 
         for (pdu in pdus) {
             val smsMessage = SmsMessage.createFromPdu(pdu as ByteArray, format)
             val messageBody = smsMessage.messageBody ?: continue
-            val sender = smsMessage.originatingAddress ?: continue
+            val sender = smsMessage.originatingAddress ?: "Unknown"
 
             Log.d("AjonActivator", "SMS from $sender: $messageBody")
 
             val lowerBody = messageBody.lowercase()
             if (lowerBody.contains("money") || lowerBody.contains("mobilemoney") || lowerBody.contains("ugx")) {
-                processPaymentMessage(context, sender, messageBody)
+                processPaymentMessage(context, sender, messageBody, subId)
             }
         }
     }
 
-    private fun processPaymentMessage(context: Context, sender: String, body: String) {
+    private fun processPaymentMessage(context: Context, sender: String, body: String, subId: Int) {
         val amountRegex = Regex("""UGX\s*([\d,]+)""", RegexOption.IGNORE_CASE)
         val amountMatch = amountRegex.find(body)
         val amount = amountMatch?.groupValues?.get(1)?.replace(",", "")?.toIntOrNull()
@@ -47,11 +52,17 @@ class SmsListener : BroadcastReceiver() {
 
         val fromRegex = Regex("""FROM\s*(\+?\d[\d\s-]{7,})""", RegexOption.IGNORE_CASE)
         val fromMatch = fromRegex.find(body)
-        val payerPhone = fromMatch?.groupValues?.get(1)?.replace(Regex("[\\s-]"), "")
+        var payerPhone = fromMatch?.groupValues?.get(1)?.replace(Regex("[\\s-]"), "")
+
+        var payerName = "Unknown"
+        val nameRegex = Regex("""FROM\s*([A-Za-z\s]{3,30})""", RegexOption.IGNORE_CASE)
+        val nameMatch = nameRegex.find(body)
+        if (nameMatch != null && payerPhone == null) {
+            payerName = nameMatch.groupValues.get(1).trim()
+        }
 
         if (payerPhone == null) {
-            Log.d("AjonActivator", "No payer phone found")
-            return
+            payerPhone = sender
         }
 
         val now = Calendar.getInstance()
@@ -63,26 +74,41 @@ class SmsListener : BroadcastReceiver() {
         )
 
         try {
-            val smsManager = SmsManager.getDefault()
-            val reply = "Your Ajon password is $password enter it faster and don't share."
-            smsManager.sendTextMessage(payerPhone, null, reply, null, null)
-            Log.d("AjonActivator", "Sent password $password to $payerPhone")
-            
-            // SAVE TO HISTORY
-            saveToHistory(context, payerPhone, amount, password)
+            val isRealPhoneNumber = payerPhone.matches(Regex("""^(\+?256|0)\d{9}$""")) || payerPhone.matches(Regex("""^\+?\d{10,15}$"""))
+
+            if (isRealPhoneNumber) {
+                // SMART MULTI-SIM LOGIC
+                val smsManager: SmsManager = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1 && subId != -1) {
+                    try {
+                        SmsManager.getSmsManagerForSubscriptionId(subId)
+                    } catch (e: Exception) {
+                        SmsManager.getDefault()
+                    }
+                } else {
+                    SmsManager.getDefault()
+                }
+
+                val reply = "Your Ajon password is $password enter it faster and don't share."
+                smsManager.sendTextMessage(payerPhone, null, reply, null, null)
+                Log.d("AjonActivator", "Sent password $password to $payerPhone using SIM $subId")
+                saveToHistory(context, payerPhone, amount, password, "SENT")
+            } else {
+                Log.d("AjonActivator", "Could not send SMS. Sender is $sender, Name is $payerName")
+                saveToHistory(context, "$payerName ($sender)", amount, password, "PENDING - MANUAL SEND")
+            }
         } catch (e: Exception) {
-            Log.e("AjonActivator", "Failed to send SMS: ${e.message}")
+            Log.e("AjonActivator", "Failed to process SMS: ${e.message}")
+            saveToHistory(context, "$payerName ($sender)", amount, password, "FAILED")
         }
     }
 
-    private fun saveToHistory(context: Context, phone: String, amount: Int, password: String) {
+    private fun saveToHistory(context: Context, displayName: String, amount: Int, password: String, status: String) {
         val prefs = context.getSharedPreferences("AjonHistory", Context.MODE_PRIVATE)
         val currentHistory = prefs.getString("log", "") ?: ""
         
         val timeStamp = SimpleDateFormat("MMM dd, HH:mm", Locale.getDefault()).format(Date())
-        val newEntry = "$phone|$amount|$password|$timeStamp\n"
+        val newEntry = "$displayName|$amount|$password|$timeStamp|$status\n"
         
-        // Keep only the last 100 entries
         val lines = (newEntry + currentHistory).lines().take(100).joinToString("\n")
         prefs.edit().putString("log", lines).apply()
     }

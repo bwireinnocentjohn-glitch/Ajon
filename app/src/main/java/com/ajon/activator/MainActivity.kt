@@ -298,7 +298,7 @@ class MainActivity : AppCompatActivity() {
             val tvPass = TextView(this)
             tvPass.text = pass
             tvPass.textSize = 18f
-            tvPass.width = 400
+            tvPass.width = 500
             if (i < 0) {
                 tvPass.setTextColor(Color.parseColor("#FF4444"))
             } else if (i == 0) {
