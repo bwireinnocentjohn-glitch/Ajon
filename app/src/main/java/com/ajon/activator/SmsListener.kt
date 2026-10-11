@@ -6,7 +6,6 @@ import android.content.Intent
 import android.os.Build
 import android.telephony.SmsManager
 import android.telephony.SmsMessage
-import android.telephony.SubscriptionManager
 import android.util.Log
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -21,8 +20,6 @@ class SmsListener : BroadcastReceiver() {
         val bundle = intent.extras ?: return
         val pdus = bundle.get("pdus") as? Array<*> ?: return
         val format = bundle.getString("format")
-        
-        // Get the SIM card that received this SMS
         val subId = intent.extras?.getInt("subscription", -1) ?: -1
 
         for (pdu in pdus) {
@@ -77,7 +74,6 @@ class SmsListener : BroadcastReceiver() {
             val isRealPhoneNumber = payerPhone.matches(Regex("""^(\+?256|0)\d{9}$""")) || payerPhone.matches(Regex("""^\+?\d{10,15}$"""))
 
             if (isRealPhoneNumber) {
-                // SMART MULTI-SIM LOGIC
                 val smsManager: SmsManager = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1 && subId != -1) {
                     try {
                         SmsManager.getSmsManagerForSubscriptionId(subId)

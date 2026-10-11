@@ -64,7 +64,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        // Bind Views
         tvCurrentPassword = findViewById(R.id.tvCurrentPassword)
         tvCountdown = findViewById(R.id.tvCountdown)
         tvPastPassword = findViewById(R.id.tvPastPassword)
@@ -83,12 +82,14 @@ class MainActivity : AppCompatActivity() {
         llLogsContent = findViewById(R.id.llLogsContent)
         llAdminContent = findViewById(R.id.llAdminContent)
 
-        // Load Admin State
+        // RESTORE STATE FROM MEMORY
         val prefs = getSharedPreferences("AjonSettings", Context.MODE_PRIVATE)
         isAdminUnlocked = prefs.getBoolean("isAdmin", false)
+        isRunning = prefs.getBoolean("isRunning", false)
+        
         updateAdminUI()
+        updateStartButtonUI()
 
-        // Tab Switching Logic
         toggleGroup.addOnButtonCheckedListener { _, checkedId, isChecked ->
             if (isChecked) {
                 when (checkedId) {
@@ -99,7 +100,6 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
-        // Default to Home Tab
         toggleGroup.check(R.id.btnTabHome)
 
         btnCopyCurrent.setOnClickListener {
@@ -129,6 +129,16 @@ class MainActivity : AppCompatActivity() {
             if (!isRunning) {
                 requestAllPermissions()
             }
+        }
+    }
+
+    private fun updateStartButtonUI() {
+        if (isRunning) {
+            btnStart.text = "Ajon Activator is Running 24/7"
+            btnStart.isEnabled = false
+        } else {
+            btnStart.text = "START 24/7 ACTIVATOR"
+            btnStart.isEnabled = true
         }
     }
 
@@ -198,8 +208,10 @@ class MainActivity : AppCompatActivity() {
 
     private fun startActivator() {
         isRunning = true
-        btnStart.text = "Ajon Activator is Running 24/7"
-        btnStart.isEnabled = false
+        val prefs = getSharedPreferences("AjonSettings", Context.MODE_PRIVATE)
+        prefs.edit().putBoolean("isRunning", true).apply()
+        
+        updateStartButtonUI()
 
         val serviceIntent = Intent(this, KeepAliveService::class.java)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -248,7 +260,6 @@ class MainActivity : AppCompatActivity() {
             )
             tvPastPassword.text = "Previous: $pastPass"
 
-            // Countdown in 12h format
             val minutesLeft = 59 - now.get(Calendar.MINUTE)
             val secondsLeft = 60 - now.get(Calendar.SECOND)
             tvCountdown.text = String.format(Locale.getDefault(), "%02d:%02d left this hour", minutesLeft, secondsLeft)
@@ -309,7 +320,7 @@ class MainActivity : AppCompatActivity() {
             row.addView(tvPass)
 
             val btnCopy = Button(this)
-            btnCopy.text = "Copy"
+            btnCopy.text = "COPY"
             btnCopy.setOnClickListener { copyToClipboard(pass) }
             row.addView(btnCopy)
 
@@ -338,11 +349,12 @@ class MainActivity : AppCompatActivity() {
         
         for (entry in entries) {
             val parts = entry.split("|")
-            if (parts.size == 4) {
-                val phone = parts[0]
+            if (parts.size == 5) {
+                val displayName = parts[0]
                 val amount = parts[1].toIntOrNull() ?: 0
                 val password = parts[2]
                 val time = parts[3]
+                val status = parts[4]
                 total += amount
 
                 val row = LinearLayout(this)
@@ -350,14 +362,18 @@ class MainActivity : AppCompatActivity() {
                 row.setPadding(0, 16, 0, 16)
 
                 val tvTop = TextView(this)
-                tvTop.text = "$phone - UGX $amount"
+                tvTop.text = "$displayName - UGX $amount"
                 tvTop.setTextColor(Color.WHITE)
                 tvTop.textSize = 16f
                 row.addView(tvTop)
 
                 val tvBottom = TextView(this)
-                tvBottom.text = "Sent: $password ($time)"
-                tvBottom.setTextColor(Color.parseColor("#00CCFF"))
+                tvBottom.text = "Pass: $password | $time\nStatus: $status"
+                if (status.contains("PENDING")) {
+                    tvBottom.setTextColor(Color.parseColor("#FFAA00"))
+                } else {
+                    tvBottom.setTextColor(Color.parseColor("#00CCFF"))
+                }
                 tvBottom.textSize = 14f
                 row.addView(tvBottom)
 
