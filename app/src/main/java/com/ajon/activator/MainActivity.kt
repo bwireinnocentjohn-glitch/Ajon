@@ -33,6 +33,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var btnStart: Button
     private lateinit var btnCopyCurrent: Button
     private lateinit var llPasswordList: LinearLayout
+    private lateinit var llTransactionLog: LinearLayout
     private val handler = Handler(Looper.getMainLooper())
     private var isRunning = false
 
@@ -54,6 +55,7 @@ class MainActivity : AppCompatActivity() {
         btnStart = findViewById(R.id.btnStart)
         btnCopyCurrent = findViewById(R.id.btnCopyCurrent)
         llPasswordList = findViewById(R.id.llPasswordList)
+        llTransactionLog = findViewById(R.id.llTransactionLog)
 
         btnCopyCurrent.setOnClickListener {
             val pass = tvCurrentPassword.text.toString()
@@ -125,7 +127,7 @@ class MainActivity : AppCompatActivity() {
             try {
                 startActivity(intent)
             } catch (e: Exception) {
-                // Ignore if not supported
+                // Ignore
             }
         }
     }
@@ -138,11 +140,9 @@ class MainActivity : AppCompatActivity() {
             val day = now.get(Calendar.DAY_OF_MONTH)
             val hour = now.get(Calendar.HOUR_OF_DAY)
 
-            // Current password
             val currentPass = makePassword(year, month, day, hour)
             tvCurrentPassword.text = currentPass
 
-            // Past hour password
             val pastCal = Calendar.getInstance()
             pastCal.add(Calendar.HOUR_OF_DAY, -1)
             val pastPass = makePassword(
@@ -153,13 +153,12 @@ class MainActivity : AppCompatActivity() {
             )
             tvPastPassword.text = "Previous: $pastPass"
 
-            // Countdown
             val minutesLeft = 59 - now.get(Calendar.MINUTE)
             val secondsLeft = 60 - now.get(Calendar.SECOND)
             tvCountdown.text = String.format(Locale.getDefault(), "%02d:%02d left this hour", minutesLeft, secondsLeft)
 
-            // Update the list
             populateSchedule(now)
+            populateTransactionLog()
 
             handler.postDelayed(this, 1000)
         }
@@ -168,7 +167,6 @@ class MainActivity : AppCompatActivity() {
     private fun populateSchedule(now: Calendar) {
         llPasswordList.removeAllViews()
 
-        // Show -2 hours to +5 hours
         for (i in -2..5) {
             val cal = Calendar.getInstance()
             cal.time = now.time
@@ -199,11 +197,11 @@ class MainActivity : AppCompatActivity() {
             tvPass.textSize = 18f
             tvPass.width = 400
             if (i < 0) {
-                tvPass.setTextColor(Color.parseColor("#FF4444")) // Red for past
+                tvPass.setTextColor(Color.parseColor("#FF4444"))
             } else if (i == 0) {
-                tvPass.setTextColor(Color.parseColor("#00FF00")) // Green for now
+                tvPass.setTextColor(Color.parseColor("#00FF00"))
             } else {
-                tvPass.setTextColor(Color.parseColor("#00CCFF")) // Cyan for next
+                tvPass.setTextColor(Color.parseColor("#00CCFF"))
             }
             row.addView(tvPass)
 
@@ -218,6 +216,51 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun populateTransactionLog() {
+        llTransactionLog.removeAllViews()
+        val prefs = getSharedPreferences("AjonHistory", Context.MODE_PRIVATE)
+        val historyText = prefs.getString("log", "") ?: ""
+
+        if (historyText.isEmpty()) {
+            val tvEmpty = TextView(this)
+            tvEmpty.text = "No transactions yet."
+            tvEmpty.setTextColor(Color.GRAY)
+            tvEmpty.textSize = 14f
+            tvEmpty.setPadding(0, 16, 0, 16)
+            llTransactionLog.addView(tvEmpty)
+            return
+        }
+
+        val entries = historyText.lines().filter { it.isNotBlank() }
+        for (entry in entries) {
+            val parts = entry.split("|")
+            if (parts.size == 4) {
+                val phone = parts[0]
+                val amount = parts[1]
+                val password = parts[2]
+                val time = parts[3]
+
+                val row = LinearLayout(this)
+                row.orientation = LinearLayout.VERTICAL
+                row.setPadding(0, 16, 0, 16)
+
+                val tvTop = TextView(this)
+                tvTop.text = "$phone - UGX $amount"
+                tvTop.setTextColor(Color.WHITE)
+                tvTop.textSize = 16f
+                row.addView(tvTop)
+
+                val tvBottom = TextView(this)
+                tvBottom.text = "Sent: $password ($time)"
+                tvBottom.setTextColor(Color.parseColor("#00CCFF"))
+                tvBottom.textSize = 14f
+                row.addView(tvBottom)
+
+                llTransactionLog.addView(row)
+            }
+        }
+    }
+
     private fun updatePasswordLoop() {
         handler.post(passwordUpdater)
     }
@@ -227,9 +270,6 @@ class MainActivity : AppCompatActivity() {
         handler.removeCallbacks(passwordUpdater)
     }
 
-    /**
-     * AJON PASSWORD FORMULA - EXACTLY AS PROVIDED
-     */
     fun makePassword(year: Int, monthIndex0: Int, day: Int, hour: Int): String {
         val monthIndex = (year - 2026) * 12 + monthIndex0
         val dayIdx = monthIndex * 31 + day

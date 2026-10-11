@@ -80,6 +80,22 @@
             android:layout_height="wrap_content"
             android:orientation="vertical" />
 
+        <!-- NEW HISTORY SECTION -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="RECENT TRANSACTIONS"
+            android:textColor="#888888"
+            android:textSize="14sp"
+            android:layout_marginTop="32dp"
+            android:layout_marginBottom="8dp" />
+
+        <LinearLayout
+            android:id="@+id/llTransactionLog"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" />
+
         <Button
             android:id="@+id/btnStart"
             android:layout_width="match_parent"
