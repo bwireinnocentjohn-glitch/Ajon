@@ -15,6 +15,7 @@ import android.os.Looper
 import android.provider.Settings
 import android.view.Gravity
 import android.view.View
+import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.LinearLayout
@@ -82,7 +83,6 @@ class MainActivity : AppCompatActivity() {
         llLogsContent = findViewById(R.id.llLogsContent)
         llAdminContent = findViewById(R.id.llAdminContent)
 
-        // RESTORE STATE FROM MEMORY
         val prefs = getSharedPreferences("AjonSettings", Context.MODE_PRIVATE)
         isAdminUnlocked = prefs.getBoolean("isAdmin", false)
         isRunning = prefs.getBoolean("isRunning", false)
@@ -309,7 +309,8 @@ class MainActivity : AppCompatActivity() {
             val tvPass = TextView(this)
             tvPass.text = pass
             tvPass.textSize = 18f
-            tvPass.width = 500
+            // FIX: Make password width flexible so COPY button always fits
+            tvPass.layoutParams = LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f)
             if (i < 0) {
                 tvPass.setTextColor(Color.parseColor("#FF4444"))
             } else if (i == 0) {

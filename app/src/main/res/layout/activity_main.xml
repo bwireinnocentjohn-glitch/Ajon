@@ -1,217 +1,230 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#000000">
+    android:background="#000000"
+    android:padding="8dp">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="16dp"
-        android:layout_margin="8dp"
-        android:background="@drawable/neon_border">
+        android:layout_height="match_parent"
+        android:background="@drawable/neon_border"
+        android:padding="4dp">
 
-        <!-- HEADER -->
-        <TextView
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="AJON ADMIN"
-            android:textColor="#00FF00"
-            android:textSize="28sp"
-            android:textStyle="bold"
-            android:gravity="center" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="HOURLY PASSWORD GENERATOR"
-            android:textColor="#888888"
-            android:textSize="14sp"
-            android:gravity="center"
-            android:layout_marginBottom="16dp" />
-
-        <!-- TAPPABLE CHIPS -->
-        <com.google.android.material.button.MaterialButtonToggleGroup
-            android:id="@+id/toggleGroup"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            app:singleSelection="true"
-            app:selectionRequired="true">
-
-            <Button
-                android:id="@+id/btnTabHome"
-                style="?attr/materialButtonOutlinedStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Home" />
-
-            <Button
-                android:id="@+id/btnTabSchedule"
-                style="?attr/materialButtonOutlinedStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Schedule" />
-
-            <Button
-                android:id="@+id/btnTabLogs"
-                style="?attr/materialButtonOutlinedStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Logs" />
-
-            <Button
-                android:id="@+id/btnTabAdmin"
-                style="?attr/materialButtonOutlinedStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Admin" />
-        </com.google.android.material.button.MaterialButtonToggleGroup>
-
-        <!-- ================= HOME TAB ================= -->
-        <LinearLayout
-            android:id="@+id/llHomeContent"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:gravity="center">
-
-            <TextView
-                android:id="@+id/tvCurrentPassword"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="LOCKED"
-                android:textColor="#00FF00"
-                android:textSize="32sp"
-                android:textStyle="bold"
-                android:gravity="center"
-                android:layout_marginTop="24dp"/>
-
-            <TextView
-                android:id="@+id/tvCountdown"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="--:-- left this hour"
-                android:textColor="#AAAAAA"
-                android:textSize="16sp"
-                android:gravity="center"
-                android:layout_marginBottom="8dp" />
-
-            <TextView
-                android:id="@+id/tvPastPassword"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Previous: --------"
-                android:textColor="#CC0000"
-                android:textSize="14sp"
-                android:gravity="center"
-                android:layout_marginBottom="16dp" />
-
-            <Button
-                android:id="@+id/btnCopyCurrent"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="COPY CURRENT PASSWORD"
-                android:layout_gravity="center"
-                android:layout_marginBottom="24dp" />
-        </LinearLayout>
-
-        <!-- ================= SCHEDULE TAB ================= -->
-        <LinearLayout
-            android:id="@+id/llScheduleContent"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:visibility="gone">
+            android:layout_height="match_parent"
+            android:background="#121212"
+            android:fillViewport="true">
 
             <LinearLayout
-                android:id="@+id/llPasswordList"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical" />
-        </LinearLayout>
+                android:orientation="vertical"
+                android:padding="16dp">
 
-        <!-- ================= LOGS TAB ================= -->
-        <LinearLayout
-            android:id="@+id/llLogsContent"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:visibility="gone">
+                <!-- HEADER -->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="AJON ADMIN"
+                    android:textColor="#00FF00"
+                    android:textSize="28sp"
+                    android:textStyle="bold"
+                    android:gravity="center" />
 
-            <TextView
-                android:id="@+id/tvTotalMoney"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Total Received: UGX 0"
-                android:textColor="#00FF00"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                android:gravity="center"
-                android:layout_marginBottom="16dp" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="HOURLY PASSWORD GENERATOR"
+                    android:textColor="#888888"
+                    android:textSize="14sp"
+                    android:gravity="center"
+                    android:layout_marginBottom="16dp" />
 
-            <LinearLayout
-                android:id="@+id/llTransactionLog"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical" />
-        </LinearLayout>
+                <!-- TAPPABLE CHIPS -->
+                <com.google.android.material.button.MaterialButtonToggleGroup
+                    android:id="@+id/toggleGroup"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    app:singleSelection="true"
+                    app:selectionRequired="true">
 
-        <!-- ================= ADMIN TAB ================= -->
-        <LinearLayout
-            android:id="@+id/llAdminContent"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:gravity="center"
-            android:visibility="gone">
+                    <Button
+                        android:id="@+id/btnTabHome"
+                        style="?attr/materialButtonOutlinedStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Home" />
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Admin Panel"
-                android:textColor="#FFFFFF"
-                android:textSize="20sp"
-                android:gravity="center"
-                android:layout_marginBottom="16dp" />
+                    <Button
+                        android:id="@+id/btnTabSchedule"
+                        style="?attr/materialButtonOutlinedStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Schedule" />
 
-            <EditText
-                android:id="@+id/etAdminPin"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Enter Admin PIN"
-                android:inputType="textPassword"
-                android:textColor="#FFFFFF"
-                android:textColorHint="#888888"
-                android:gravity="center"
-                android:layout_marginBottom="16dp" />
+                    <Button
+                        android:id="@+id/btnTabLogs"
+                        style="?attr/materialButtonOutlinedStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Logs" />
 
-            <Button
-                android:id="@+id/btnUnlockAdmin"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="UNLOCK ADMIN" />
+                    <Button
+                        android:id="@+id/btnTabAdmin"
+                        style="?attr/materialButtonOutlinedStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Admin" />
+                </com.google.android.material.button.MaterialButtonToggleGroup>
 
-            <TextView
-                android:id="@+id/tvAdminStatus"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Status: Locked"
-                android:textColor="#FF4444"
-                android:textSize="16sp"
-                android:gravity="center"
-                android:layout_marginTop="16dp" />
+                <!-- ================= HOME TAB ================= -->
+                <LinearLayout
+                    android:id="@+id/llHomeContent"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:gravity="center">
 
-            <Button
-                android:id="@+id/btnStart"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="START 24/7 ACTIVATOR"
-                android:textSize="18sp"
-                android:layout_marginTop="24dp" />
-        </LinearLayout>
+                    <TextView
+                        android:id="@+id/tvCurrentPassword"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="LOCKED"
+                        android:textColor="#00FF00"
+                        android:textSize="32sp"
+                        android:textStyle="bold"
+                        android:gravity="center"
+                        android:layout_marginTop="24dp"/>
 
+                    <TextView
+                        android:id="@+id/tvCountdown"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="--:-- left this hour"
+                        android:textColor="#AAAAAA"
+                        android:textSize="16sp"
+                        android:gravity="center"
+                        android:layout_marginBottom="8dp" />
+
+                    <TextView
+                        android:id="@+id/tvPastPassword"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Previous: --------"
+                        android:textColor="#CC0000"
+                        android:textSize="14sp"
+                        android:gravity="center"
+                        android:layout_marginBottom="16dp" />
+
+                    <Button
+                        android:id="@+id/btnCopyCurrent"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="COPY CURRENT PASSWORD"
+                        android:layout_gravity="center"
+                        android:layout_marginBottom="24dp" />
+                </LinearLayout>
+
+                <!-- ================= SCHEDULE TAB ================= -->
+                <LinearLayout
+                    android:id="@+id/llScheduleContent"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                    <LinearLayout
+                        android:id="@+id/llPasswordList"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical" />
+                </LinearLayout>
+
+                <!-- ================= LOGS TAB ================= -->
+                <LinearLayout
+                    android:id="@+id/llLogsContent"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:id="@+id/tvTotalMoney"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Total Received: UGX 0"
+                        android:textColor="#00FF00"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        android:gravity="center"
+                        android:layout_marginBottom="16dp" />
+
+                    <LinearLayout
+                        android:id="@+id/llTransactionLog"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical" />
+                </LinearLayout>
+
+                <!-- ================= ADMIN TAB ================= -->
+                <LinearLayout
+                    android:id="@+id/llAdminContent"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Admin Panel"
+                        android:textColor="#FFFFFF"
+                        android:textSize="20sp"
+                        android:gravity="center"
+                        android:layout_marginBottom="16dp" />
+
+                    <EditText
+                        android:id="@+id/etAdminPin"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Enter Admin PIN"
+                        android:inputType="textPassword"
+                        android:textColor="#FFFFFF"
+                        android:textColorHint="#888888"
+                        android:gravity="center"
+                        android:layout_marginBottom="16dp" />
+
+                    <Button
+                        android:id="@+id/btnUnlockAdmin"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="UNLOCK ADMIN" />
+
+                    <TextView
+                        android:id="@+id/tvAdminStatus"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Status: Locked"
+                        android:textColor="#FF4444"
+                        android:textSize="16sp"
+                        android:gravity="center"
+                        android:layout_marginTop="16dp" />
+
+                    <Button
+                        android:id="@+id/btnStart"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="START 24/7 ACTIVATOR"
+                        android:textSize="18sp"
+                        android:layout_marginTop="24dp" />
+                </LinearLayout>
+
+            </LinearLayout>
+        </ScrollView>
     </LinearLayout>
-</ScrollView>
+</FrameLayout>
