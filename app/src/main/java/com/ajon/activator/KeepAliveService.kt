@@ -23,7 +23,7 @@ class KeepAliveService : Service() {
     companion object {
         private const val CHANNEL_ID = "ajon_activator_channel"
         private const val NOTIFICATION_ID = 1001
-        private const val SEND_INTERVAL_MS = 30000L // 30 seconds between SMS (2 per minute)
+        private const val SEND_INTERVAL_MS = 30000L // 30 seconds between SMS
         private const val SIM_SWITCH_LIMIT = 60
         private const val DAILY_LIMIT = 150
     }
@@ -33,12 +33,9 @@ class KeepAliveService : Service() {
     private val queueProcessor = object : Runnable {
         override fun run() {
             val processed = processNextInQueue()
-            
             if (processed) {
-                // Wait 30 seconds before sending the next message
                 handler.postDelayed(this, SEND_INTERVAL_MS)
             } else {
-                // Queue is empty, check again in 5 seconds
                 handler.postDelayed(this, 5000L)
             }
         }
@@ -52,10 +49,8 @@ class KeepAliveService : Service() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         val notification = buildNotification()
         startForeground(NOTIFICATION_ID, notification)
-        
         handler.removeCallbacks(queueProcessor)
         handler.post(queueProcessor)
-        
         return START_STICKY
     }
 
@@ -66,31 +61,21 @@ class KeepAliveService : Service() {
     private fun checkAndResetDailyLimit(prefs: android.content.SharedPreferences): Boolean {
         val today = getTodayDate()
         val lastDate = prefs.getString("lastSmsDate", "")
-        
         if (today != lastDate) {
-            prefs.edit()
-                .putString("lastSmsDate", today)
-                .putInt("dailySmsCount", 0)
-                .apply()
-            Log.d("AjonActivator", "New day! Daily SMS count reset to 0.")
+            prefs.edit().putString("lastSmsDate", today).putInt("dailySmsCount", 0).apply()
         }
-        
         val count = prefs.getInt("dailySmsCount", 0)
         return count < DAILY_LIMIT
     }
 
     private fun processNextInQueue(): Boolean {
         val settingsPrefs = getSharedPreferences("AjonSettings", Context.MODE_PRIVATE)
-        
-        // Check daily limit
         if (!checkAndResetDailyLimit(settingsPrefs)) {
-            Log.d("AjonActivator", "Daily limit of $DAILY_LIMIT reached. Waiting until tomorrow.")
             return false
         }
 
         val prefs = getSharedPreferences("AjonQueue", Context.MODE_PRIVATE)
         val queueText = prefs.getString("queue", "") ?: ""
-        
         if (queueText.isBlank()) return false
 
         val lines = queueText.lines().filter { it.isNotBlank() }.toMutableList()
@@ -100,25 +85,33 @@ class KeepAliveService : Service() {
         prefs.edit().putString("queue", lines.joinToString("\n")).apply()
 
         val parts = firstEntry.split("|")
-        if (parts.size == 4) {
+        if (parts.size == 5) {
             val phone = parts[0]
             val password = parts[1]
             val payerName = parts[2]
             val amount = parts[3].toIntOrNull() ?: 0
+            val isTwoDay = parts[4] == "1"
 
             val isRealPhoneNumber = phone.matches(Regex("""^(\+?256|0)\d{9}$""")) || phone.matches(Regex("""^\+?\d{10,15}$"""))
 
             if (isRealPhoneNumber) {
-                sendSmsWithSmartSim(phone, password, payerName, amount, settingsPrefs)
+                // NEW MESSAGE FORMAT: Password on its own line for easy copying
+                val reply = if (isTwoDay) {
+                    "User $phone Your 2 Days Ajon Password\n\n$password\n\nCopy & Paste."
+                } else {
+                    "User $phone This is your Ajon Password\n\n$password\n\nCopy & Paste."
+                }
+                sendSmsWithSmartSim(phone, password, reply, amount, settingsPrefs, isTwoDay)
             } else {
-                saveToHistory("$payerName ($phone)", amount, password, "PENDING - MANUAL SEND")
+                val status = if (isTwoDay) "PENDING (2DAY) - MANUAL SEND" else "PENDING - MANUAL SEND"
+                saveToHistory("$payerName ($phone)", amount, password, status)
             }
             return true
         }
         return false
     }
 
-    private fun sendSmsWithSmartSim(phone: String, password: String, payerName: String, amount: Int, settingsPrefs: android.content.SharedPreferences) {
+    private fun sendSmsWithSmartSim(phone: String, password: String, reply: String, amount: Int, settingsPrefs: android.content.SharedPreferences, isTwoDay: Boolean) {
         var smsSentOnCurrentSim = settingsPrefs.getInt("smsSentOnCurrentSim", 0)
         var currentSimIndex = settingsPrefs.getInt("currentSimIndex", 0)
         var dailyCount = settingsPrefs.getInt("dailySmsCount", 0)
@@ -145,19 +138,15 @@ class KeepAliveService : Service() {
                 SmsManager.getDefault()
             }
             
-            // Personalized message to prevent looking like spam
-            val reply = "User $phone this is your Ajon password: $password enter it fast & don't share."
             smsManager.sendTextMessage(phone, null, reply, null, null)
             
             smsSentOnCurrentSim++
             dailyCount++
-            Log.d("AjonActivator", "Sent via SIM $targetSubId. Daily count: $dailyCount / $DAILY_LIMIT")
             
             if (smsSentOnCurrentSim >= SIM_SWITCH_LIMIT && activeSubs != null && activeSubs.size > 1) {
                 currentSimIndex++
                 if (currentSimIndex >= activeSubs.size) currentSimIndex = 0
                 smsSentOnCurrentSim = 0
-                Log.d("AjonActivator", "SWITCHING SIM! Now using index $currentSimIndex")
             }
             
             settingsPrefs.edit()
@@ -166,9 +155,9 @@ class KeepAliveService : Service() {
                 .putInt("dailySmsCount", dailyCount)
                 .apply()
                 
-            saveToHistory(phone, amount, password, "SENT")
+            val status = if (isTwoDay) "SENT (2DAY)" else "SENT (HOURLY)"
+            saveToHistory(phone, amount, password, status)
         } catch (e: Exception) {
-            Log.e("AjonActivator", "Failed to send SMS: ${e.message}")
             saveToHistory(phone, amount, password, "FAILED")
         }
     }
@@ -176,10 +165,8 @@ class KeepAliveService : Service() {
     private fun saveToHistory(displayName: String, amount: Int, password: String, status: String) {
         val prefs = getSharedPreferences("AjonHistory", Context.MODE_PRIVATE)
         val currentHistory = prefs.getString("log", "") ?: ""
-        
         val timeStamp = SimpleDateFormat("MMM dd, HH:mm", Locale.getDefault()).format(Date())
         val newEntry = "$displayName|$amount|$password|$timeStamp|$status\n"
-        
         val lines = (newEntry + currentHistory).lines().take(100).joinToString("\n")
         prefs.edit().putString("log", lines).apply()
     }
@@ -187,7 +174,7 @@ class KeepAliveService : Service() {
     private fun buildNotification(): Notification {
         return NotificationCompat.Builder(this, CHANNEL_ID)
             .setContentTitle("Ajon Activator")
-            .setContentText("AJON Active 24/7 - Safe Queue Active")
+            .setContentText("AJON Active 24/7 - Dual Password System Active")
             .setSmallIcon(android.R.drawable.ic_dialog_info)
             .setOngoing(true)
             .setPriority(NotificationCompat.PRIORITY_LOW)
