@@ -40,6 +40,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var llTransactionLog: LinearLayout
     private lateinit var tvTotalMoney: TextView
     private lateinit var tvQueueStatus: TextView
+    private lateinit var tvDailyCount: TextView
     private lateinit var etAdminPin: EditText
     private lateinit var btnUnlockAdmin: Button
     private lateinit var tvAdminStatus: TextView
@@ -76,6 +77,7 @@ class MainActivity : AppCompatActivity() {
         llTransactionLog = findViewById(R.id.llTransactionLog)
         tvTotalMoney = findViewById(R.id.tvTotalMoney)
         tvQueueStatus = findViewById(R.id.tvQueueStatus)
+        tvDailyCount = findViewById(R.id.tvDailyCount)
         etAdminPin = findViewById(R.id.etAdminPin)
         btnUnlockAdmin = findViewById(R.id.btnUnlockAdmin)
         tvAdminStatus = findViewById(R.id.tvAdminStatus)
@@ -280,6 +282,10 @@ class MainActivity : AppCompatActivity() {
         val queueText = prefs.getString("queue", "") ?: ""
         val lines = queueText.lines().filter { it.isNotBlank() }
         tvQueueStatus.text = "People in Queue: ${lines.size}"
+
+        val settingsPrefs = getSharedPreferences("AjonSettings", Context.MODE_PRIVATE)
+        val dailyCount = settingsPrefs.getInt("dailySmsCount", 0)
+        tvDailyCount.text = "Sent Today: $dailyCount / 150"
     }
 
     private fun format12Hour(cal: Calendar): String {
