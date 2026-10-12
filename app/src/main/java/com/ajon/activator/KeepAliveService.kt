@@ -23,31 +23,22 @@ class KeepAliveService : Service() {
     companion object {
         private const val CHANNEL_ID = "ajon_activator_channel"
         private const val NOTIFICATION_ID = 1001
-        private const val BURST_SIZE = 10
-        private const val BURST_REST_MS = 30000L // 30 seconds rest
-        private const val SEND_INTERVAL_MS = 5000L // 5 seconds between SMS
+        private const val SEND_INTERVAL_MS = 30000L // 30 seconds between SMS (2 per minute)
         private const val SIM_SWITCH_LIMIT = 60
         private const val DAILY_LIMIT = 150
     }
 
     private val handler = Handler(Looper.getMainLooper())
-    private var burstCount = 0
 
     private val queueProcessor = object : Runnable {
         override fun run() {
             val processed = processNextInQueue()
             
             if (processed) {
-                burstCount++
-                if (burstCount >= BURST_SIZE) {
-                    Log.d("AjonActivator", "Batch of $BURST_SIZE done. Resting for 30 seconds...")
-                    burstCount = 0
-                    handler.postDelayed(this, BURST_REST_MS)
-                } else {
-                    handler.postDelayed(this, SEND_INTERVAL_MS)
-                }
+                // Wait 30 seconds before sending the next message
+                handler.postDelayed(this, SEND_INTERVAL_MS)
             } else {
-                burstCount = 0
+                // Queue is empty, check again in 5 seconds
                 handler.postDelayed(this, 5000L)
             }
         }
@@ -91,7 +82,7 @@ class KeepAliveService : Service() {
     private fun processNextInQueue(): Boolean {
         val settingsPrefs = getSharedPreferences("AjonSettings", Context.MODE_PRIVATE)
         
-        // 1. Check daily limit (150 messages per day)
+        // Check daily limit
         if (!checkAndResetDailyLimit(settingsPrefs)) {
             Log.d("AjonActivator", "Daily limit of $DAILY_LIMIT reached. Waiting until tomorrow.")
             return false
@@ -154,7 +145,7 @@ class KeepAliveService : Service() {
                 SmsManager.getDefault()
             }
             
-            // PERSONALIZED MESSAGE: Includes the user's phone number so it's unique per contact!
+            // Personalized message to prevent looking like spam
             val reply = "User $phone this is your Ajon password: $password enter it fast & don't share."
             smsManager.sendTextMessage(phone, null, reply, null, null)
             
