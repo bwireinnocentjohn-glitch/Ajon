@@ -153,6 +153,19 @@
                     android:visibility="gone">
 
                     <TextView
+                        android:id="@+id/tvQueueStatus"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="People in Queue: 0"
+                        android:textColor="#FFAA00"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:gravity="center"
+                        android:padding="12dp"
+                        android:background="#33000000"
+                        android:layout_marginBottom="8dp" />
+
+                    <TextView
                         android:id="@+id/tvTotalMoney"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"

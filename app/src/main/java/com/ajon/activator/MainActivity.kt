@@ -39,6 +39,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var llPasswordList: LinearLayout
     private lateinit var llTransactionLog: LinearLayout
     private lateinit var tvTotalMoney: TextView
+    private lateinit var tvQueueStatus: TextView
     private lateinit var etAdminPin: EditText
     private lateinit var btnUnlockAdmin: Button
     private lateinit var tvAdminStatus: TextView
@@ -58,7 +59,8 @@ class MainActivity : AppCompatActivity() {
         Manifest.permission.RECEIVE_SMS,
         Manifest.permission.READ_SMS,
         Manifest.permission.SEND_SMS,
-        Manifest.permission.POST_NOTIFICATIONS
+        Manifest.permission.POST_NOTIFICATIONS,
+        Manifest.permission.READ_PHONE_STATE
     )
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -73,6 +75,7 @@ class MainActivity : AppCompatActivity() {
         llPasswordList = findViewById(R.id.llPasswordList)
         llTransactionLog = findViewById(R.id.llTransactionLog)
         tvTotalMoney = findViewById(R.id.tvTotalMoney)
+        tvQueueStatus = findViewById(R.id.tvQueueStatus)
         etAdminPin = findViewById(R.id.etAdminPin)
         btnUnlockAdmin = findViewById(R.id.btnUnlockAdmin)
         tvAdminStatus = findViewById(R.id.tvAdminStatus)
@@ -199,7 +202,7 @@ class MainActivity : AppCompatActivity() {
             } else {
                 AlertDialog.Builder(this)
                     .setTitle("Permissions Needed")
-                    .setMessage("Ajon Activator needs SMS and notification permissions to work. Please allow them.")
+                    .setMessage("Ajon Activator needs SMS, Phone, and notification permissions to work. Please allow them all.")
                     .setPositiveButton("OK", null)
                     .show()
             }
@@ -266,9 +269,17 @@ class MainActivity : AppCompatActivity() {
 
             populateSchedule(now)
             populateTransactionLog()
+            updateQueueStatus()
 
             handler.postDelayed(this, 1000)
         }
+    }
+
+    private fun updateQueueStatus() {
+        val prefs = getSharedPreferences("AjonQueue", Context.MODE_PRIVATE)
+        val queueText = prefs.getString("queue", "") ?: ""
+        val lines = queueText.lines().filter { it.isNotBlank() }
+        tvQueueStatus.text = "People in Queue: ${lines.size}"
     }
 
     private fun format12Hour(cal: Calendar): String {
@@ -309,7 +320,6 @@ class MainActivity : AppCompatActivity() {
             val tvPass = TextView(this)
             tvPass.text = pass
             tvPass.textSize = 18f
-            // FIX: Make password width flexible so COPY button always fits
             tvPass.layoutParams = LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f)
             if (i < 0) {
                 tvPass.setTextColor(Color.parseColor("#FF4444"))
