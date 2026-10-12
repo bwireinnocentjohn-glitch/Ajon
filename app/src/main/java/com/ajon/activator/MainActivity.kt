@@ -1,6 +1,7 @@
 package com.ajon.activator
 
 import android.Manifest
+import android.app.AlertDialog
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
@@ -21,7 +22,6 @@ import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -37,6 +37,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var btnStart: Button
     private lateinit var btnCopyCurrent: Button
     private lateinit var llPasswordList: LinearLayout
+    private lateinit var llTwoDayList: LinearLayout
     private lateinit var llTransactionLog: LinearLayout
     private lateinit var tvTotalMoney: TextView
     private lateinit var tvQueueStatus: TextView
@@ -48,6 +49,7 @@ class MainActivity : AppCompatActivity() {
     
     private lateinit var llHomeContent: LinearLayout
     private lateinit var llScheduleContent: LinearLayout
+    private lateinit var llTwoDayContent: LinearLayout
     private lateinit var llLogsContent: LinearLayout
     private lateinit var llAdminContent: LinearLayout
 
@@ -74,6 +76,7 @@ class MainActivity : AppCompatActivity() {
         btnStart = findViewById(R.id.btnStart)
         btnCopyCurrent = findViewById(R.id.btnCopyCurrent)
         llPasswordList = findViewById(R.id.llPasswordList)
+        llTwoDayList = findViewById(R.id.llTwoDayList)
         llTransactionLog = findViewById(R.id.llTransactionLog)
         tvTotalMoney = findViewById(R.id.tvTotalMoney)
         tvQueueStatus = findViewById(R.id.tvQueueStatus)
@@ -85,6 +88,7 @@ class MainActivity : AppCompatActivity() {
         
         llHomeContent = findViewById(R.id.llHomeContent)
         llScheduleContent = findViewById(R.id.llScheduleContent)
+        llTwoDayContent = findViewById(R.id.llTwoDayContent)
         llLogsContent = findViewById(R.id.llLogsContent)
         llAdminContent = findViewById(R.id.llAdminContent)
 
@@ -100,8 +104,9 @@ class MainActivity : AppCompatActivity() {
                 when (checkedId) {
                     R.id.btnTabHome -> showTab(0)
                     R.id.btnTabSchedule -> showTab(1)
-                    R.id.btnTabLogs -> showTab(2)
-                    R.id.btnTabAdmin -> showTab(3)
+                    R.id.btnTabTwoDay -> showTab(2)
+                    R.id.btnTabLogs -> showTab(3)
+                    R.id.btnTabAdmin -> showTab(4)
                 }
             }
         }
@@ -174,8 +179,9 @@ class MainActivity : AppCompatActivity() {
     private fun showTab(index: Int) {
         llHomeContent.visibility = if (index == 0) View.VISIBLE else View.GONE
         llScheduleContent.visibility = if (index == 1) View.VISIBLE else View.GONE
-        llLogsContent.visibility = if (index == 2) View.VISIBLE else View.GONE
-        llAdminContent.visibility = if (index == 3) View.VISIBLE else View.GONE
+        llTwoDayContent.visibility = if (index == 2) View.VISIBLE else View.GONE
+        llLogsContent.visibility = if (index == 3) View.VISIBLE else View.GONE
+        llAdminContent.visibility = if (index == 4) View.VISIBLE else View.GONE
     }
 
     private fun copyToClipboard(text: String) {
@@ -252,12 +258,12 @@ class MainActivity : AppCompatActivity() {
             val day = now.get(Calendar.DAY_OF_MONTH)
             val hour = now.get(Calendar.HOUR_OF_DAY)
 
-            val currentPass = makePassword(year, month, day, hour)
+            val currentPass = makePasswordHourly(year, month, day, hour)
             tvCurrentPassword.text = currentPass
 
             val pastCal = Calendar.getInstance()
             pastCal.add(Calendar.HOUR_OF_DAY, -1)
-            val pastPass = makePassword(
+            val pastPass = makePasswordHourly(
                 pastCal.get(Calendar.YEAR),
                 pastCal.get(Calendar.MONTH),
                 pastCal.get(Calendar.DAY_OF_MONTH),
@@ -270,6 +276,7 @@ class MainActivity : AppCompatActivity() {
             tvCountdown.text = String.format(Locale.getDefault(), "%02d:%02d left this hour", minutesLeft, secondsLeft)
 
             populateSchedule(now)
+            populateTwoDaySchedule(now)
             populateTransactionLog()
             updateQueueStatus()
 
@@ -303,7 +310,7 @@ class MainActivity : AppCompatActivity() {
             cal.time = now.time
             cal.add(Calendar.HOUR_OF_DAY, i)
 
-            val pass = makePassword(
+            val pass = makePasswordHourly(
                 cal.get(Calendar.YEAR),
                 cal.get(Calendar.MONTH),
                 cal.get(Calendar.DAY_OF_MONTH),
@@ -342,6 +349,56 @@ class MainActivity : AppCompatActivity() {
             row.addView(btnCopy)
 
             llPasswordList.addView(row)
+        }
+    }
+
+    private fun populateTwoDaySchedule(now: Calendar) {
+        llTwoDayList.removeAllViews()
+
+        for (i in -2..5) {
+            val cal = Calendar.getInstance()
+            cal.time = now.time
+            cal.add(Calendar.HOUR_OF_DAY, i)
+
+            val pass = makePassword2Days(
+                cal.get(Calendar.YEAR),
+                cal.get(Calendar.MONTH),
+                cal.get(Calendar.DAY_OF_MONTH),
+                cal.get(Calendar.HOUR_OF_DAY)
+            )
+            val timeStr = format12Hour(cal)
+
+            val row = LinearLayout(this)
+            row.orientation = LinearLayout.HORIZONTAL
+            row.setPadding(0, 24, 0, 24)
+            row.gravity = Gravity.CENTER_VERTICAL
+
+            val tvTime = TextView(this)
+            tvTime.text = timeStr
+            tvTime.setTextColor(Color.WHITE)
+            tvTime.width = 200
+            tvTime.textSize = 16f
+            row.addView(tvTime)
+
+            val tvPass = TextView(this)
+            tvPass.text = pass
+            tvPass.textSize = 18f
+            tvPass.layoutParams = LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f)
+            if (i < 0) {
+                tvPass.setTextColor(Color.parseColor("#FF4444"))
+            } else if (i == 0) {
+                tvPass.setTextColor(Color.parseColor("#00FF00"))
+            } else {
+                tvPass.setTextColor(Color.parseColor("#00CCFF"))
+            }
+            row.addView(tvPass)
+
+            val btnCopy = Button(this)
+            btnCopy.text = "COPY"
+            btnCopy.setOnClickListener { copyToClipboard(pass) }
+            row.addView(btnCopy)
+
+            llTwoDayList.addView(row)
         }
     }
 
@@ -410,11 +467,24 @@ class MainActivity : AppCompatActivity() {
         handler.removeCallbacks(passwordUpdater)
     }
 
-    fun makePassword(year: Int, monthIndex0: Int, day: Int, hour: Int): String {
+    fun makePasswordHourly(year: Int, monthIndex0: Int, day: Int, hour: Int): String {
         val monthIndex = (year - 2026) * 12 + monthIndex0
         val dayIdx = monthIndex * 31 + day
         val hourIdx = dayIdx * 24 + hour
         val num = 2000 + hourIdx * 13 + 77 * 13
+        val l1 = ('a' + ((year - 2026) % 26))
+        val l2 = ('a' + (monthIndex0 % 26))
+        val l3 = ('a' + (day % 26))
+        val l4 = ('a' + hour)
+        val last = (hourIdx * 7 + year % 10) % 9 + 1
+        return "aj$num$l1$l2$l3$l4$last".lowercase()
+    }
+
+    fun makePassword2Days(year: Int, monthIndex0: Int, day: Int, hour: Int): String {
+        val monthIndex = (year - 2026) * 12 + monthIndex0
+        val dayIdx = monthIndex * 31 + day
+        val hourIdx = dayIdx * 24 + hour
+        val num = 1500 + hourIdx * 17 + 33 * 7
         val l1 = ('a' + ((year - 2026) % 26))
         val l2 = ('a' + (monthIndex0 % 26))
         val l3 = ('a' + (day % 26))
