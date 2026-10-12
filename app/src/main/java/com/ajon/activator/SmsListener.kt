@@ -3,14 +3,9 @@ package com.ajon.activator
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.os.Build
-import android.telephony.SmsManager
 import android.telephony.SmsMessage
 import android.util.Log
-import java.text.SimpleDateFormat
 import java.util.Calendar
-import java.util.Date
-import java.util.Locale
 
 class SmsListener : BroadcastReceiver() {
 
@@ -20,7 +15,6 @@ class SmsListener : BroadcastReceiver() {
         val bundle = intent.extras ?: return
         val pdus = bundle.get("pdus") as? Array<*> ?: return
         val format = bundle.getString("format")
-        val subId = intent.extras?.getInt("subscription", -1) ?: -1
 
         for (pdu in pdus) {
             val smsMessage = SmsMessage.createFromPdu(pdu as ByteArray, format)
@@ -31,12 +25,12 @@ class SmsListener : BroadcastReceiver() {
 
             val lowerBody = messageBody.lowercase()
             if (lowerBody.contains("money") || lowerBody.contains("mobilemoney") || lowerBody.contains("ugx")) {
-                processPaymentMessage(context, sender, messageBody, subId)
+                processPaymentMessage(context, sender, messageBody)
             }
         }
     }
 
-    private fun processPaymentMessage(context: Context, sender: String, body: String, subId: Int) {
+    private fun processPaymentMessage(context: Context, sender: String, body: String) {
         val amountRegex = Regex("""UGX\s*([\d,]+)""", RegexOption.IGNORE_CASE)
         val amountMatch = amountRegex.find(body)
         val amount = amountMatch?.groupValues?.get(1)?.replace(",", "")?.toIntOrNull()
@@ -70,43 +64,17 @@ class SmsListener : BroadcastReceiver() {
             now.get(Calendar.HOUR_OF_DAY)
         )
 
-        try {
-            val isRealPhoneNumber = payerPhone.matches(Regex("""^(\+?256|0)\d{9}$""")) || payerPhone.matches(Regex("""^\+?\d{10,15}$"""))
-
-            if (isRealPhoneNumber) {
-                val smsManager: SmsManager = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1 && subId != -1) {
-                    try {
-                        SmsManager.getSmsManagerForSubscriptionId(subId)
-                    } catch (e: Exception) {
-                        SmsManager.getDefault()
-                    }
-                } else {
-                    SmsManager.getDefault()
-                }
-
-                val reply = "Your Ajon password is $password enter it faster and don't share."
-                smsManager.sendTextMessage(payerPhone, null, reply, null, null)
-                Log.d("AjonActivator", "Sent password $password to $payerPhone using SIM $subId")
-                saveToHistory(context, payerPhone, amount, password, "SENT")
-            } else {
-                Log.d("AjonActivator", "Could not send SMS. Sender is $sender, Name is $payerName")
-                saveToHistory(context, "$payerName ($sender)", amount, password, "PENDING - MANUAL SEND")
-            }
-        } catch (e: Exception) {
-            Log.e("AjonActivator", "Failed to process SMS: ${e.message}")
-            saveToHistory(context, "$payerName ($sender)", amount, password, "FAILED")
-        }
+        // ADD TO QUEUE
+        addToQueue(context, payerPhone, password, payerName, amount)
     }
 
-    private fun saveToHistory(context: Context, displayName: String, amount: Int, password: String, status: String) {
-        val prefs = context.getSharedPreferences("AjonHistory", Context.MODE_PRIVATE)
-        val currentHistory = prefs.getString("log", "") ?: ""
-        
-        val timeStamp = SimpleDateFormat("MMM dd, HH:mm", Locale.getDefault()).format(Date())
-        val newEntry = "$displayName|$amount|$password|$timeStamp|$status\n"
-        
-        val lines = (newEntry + currentHistory).lines().take(100).joinToString("\n")
-        prefs.edit().putString("log", lines).apply()
+    private fun addToQueue(context: Context, phone: String, password: String, payerName: String, amount: Int) {
+        val prefs = context.getSharedPreferences("AjonQueue", Context.MODE_PRIVATE)
+        val currentQueue = prefs.getString("queue", "") ?: ""
+        val newEntry = "$phone|$password|$payerName|$amount\n"
+        val updatedQueue = currentQueue + newEntry
+        prefs.edit().putString("queue", updatedQueue).apply()
+        Log.d("AjonActivator", "Added to queue: $phone")
     }
 
     private fun makePassword(year: Int, monthIndex0: Int, day: Int, hour: Int): String {
